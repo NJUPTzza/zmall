@@ -1,0 +1,113 @@
+// 购物车模块
+syntax = "proto3";
+
+package cart;
+
+// 生成 Go 代码时的包路径
+option go_package = "/cart";
+
+// 通用响应消息，包含错误码和错误信息
+message CommonResp {
+  // 错误码，0 表示成功，非 0 表示失败
+  int32 code = 1;
+  // 错误信息
+  string message = 2;
+}
+
+// 购物车商品项消息
+message CartItem {
+  // 产品唯一标识符
+  uint32 product_id = 1;
+  // 商品数量
+  int32 quantity = 2;
+}
+
+// 购物车消息
+message Cart {
+  // 用户唯一标识符
+  uint32 user_id = 1;
+  // 购物车商品项列表
+  repeated CartItem items = 2;
+}
+
+// 添加商品到购物车请求消息
+message AddItemReq {
+  // 用户唯一标识符
+  uint32 user_id = 1;
+  // 购物车商品项信息
+  CartItem item = 2;
+}
+
+// 添加商品到购物车响应消息
+message AddItemResp {
+  // 通用响应信息
+  CommonResp common_resp = 1;
+}
+
+// 清空购物车请求消息
+message EmptyCartReq {
+  // 用户唯一标识符
+  uint32 user_id = 1;
+}
+
+// 清空购物车响应消息
+message EmptyCartResp {
+  // 通用响应信息
+  CommonResp common_resp = 1;
+}
+
+// 获取购物车请求消息
+message GetCartReq {
+  // 用户唯一标识符
+  uint32 user_id = 1;
+}
+
+// 获取购物车响应消息
+message GetCartResp {
+  // 通用响应信息
+  CommonResp common_resp = 1;
+  // 购物车信息
+  Cart cart = 2;
+}
+
+// 更新购物车请求消息
+message UpdateCartReq {
+  // 用户唯一标识符
+  uint32 user_id = 1;
+  // 购物车商品项信息
+  CartItem item = 2;
+}
+
+// 更新购物车响应消息
+message UpdateCartResp {
+  // 通用响应信息
+  CommonResp common_resp = 1;
+}
+
+// 删除购物车商品项请求消息
+message DeleteItemReq {
+  // 用户唯一标识符
+  uint32 user_id = 1;
+  // 产品唯一标识符
+  uint32 product_id = 2;
+}
+
+// 删除购物车商品项响应消息
+message DeleteItemResp {
+  // 通用响应信息
+  CommonResp common_resp = 1;
+}
+
+// 购物车服务定义
+service CartService {
+  // 添加商品到购物车
+  rpc AddItem(AddItemReq) returns (AddItemResp) {}
+  // 获取购物车信息
+  rpc GetCart(GetCartReq) returns (GetCartResp) {}
+  // 清空购物车
+  rpc EmptyCart(EmptyCartReq) returns (EmptyCartResp) {}
+  // 更新购物车
+  rpc UpdateCart(UpdateCartReq) returns (UpdateCartResp) {}
+  // 删除购物车商品项
+  rpc DeleteItem(DeleteItemReq) returns (DeleteItemResp) {}
+}
