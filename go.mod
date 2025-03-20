@@ -38,3 +38,5 @@ require (
 	gorm.io/driver/sqlite v1.5.7 // indirect
 	gorm.io/gorm v1.25.12 // indirect
 )
+
+replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
