@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package agent;
+
+option go_package = "/agent";
+
+// 客服服务
+service AgentService {
+  // 发送消息给客服
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
+  // 获取聊天记录
+  rpc GetChatHistory(GetChatHistoryRequest) returns (GetChatHistoryResponse);
+}
+
+// 消息
+message Message {
+  int64 id = 1;           // 消息ID
+  int64 user_id = 2;      // 用户ID
+  string content = 3;     // 消息内容
+  string sender = 4;      // 发送者（"user" 或 "agent"）
+  int64 timestamp = 5;    // 发送时间戳
+}
+
+// 发送消息请求
+message SendMessageRequest {
+  int64 user_id = 1;      // 用户ID
+  string content = 2;     // 消息内容
+}
+
+// 发送消息返回
+message SendMessageResponse {
+  Message message = 1;    // 发送的消息
+}
+
+// 获取聊天记录请求
+message GetChatHistoryRequest {
+  int64 user_id = 1;      // 用户ID
+}
+
+// 获取聊天记录返回
+message GetChatHistoryResponse {
+  repeated Message messages = 1;  // 聊天记录
+}

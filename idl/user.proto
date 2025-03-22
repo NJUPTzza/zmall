@@ -1,93 +1,68 @@
-// 用户模块
 syntax = "proto3";
 
 package user;
 
-// 生成 Go 代码时的包路径
 option go_package = "/user";
 
-// 通用响应消息，包含错误码和错误信息
-message CommonResp {
-  // 错误码，0 表示成功，非 0 表示失败
-  int32 code = 1;
-  // 错误信息
-  string message = 2;
-}
-
-message User {
-    int32 id = 1;
-    string username = 2;
-    string password = 3;
-    string email = 4;
-}
-
-// 用户注册请求消息
-message RegisterReq {
-    // 用户账号
-    string username = 1;
-    // 用户加密后的密码
-    string password = 2;
-    // 用户邮箱
-    string email = 3;
-}
-
-// 用户注册响应消息
-message RegisterResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-  // 用户唯一标识符
-  int32 user_id = 2;
-}
-
-// 用户登录请求消息
-message LoginReq {
-  // 用户账号
-  string username = 1;
-  // 用户密码
-  string password = 2;
-}
-
-// 用户登录响应消息
-message LoginResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-  // 用户唯一标识符
-  int32 user_id = 2;
-}
-
-// 获取用户信息请求消息
-message UserInfoReq {
-  // 用户唯一标识符
-  int32 user_id = 1;
-}
-
-// 获取用户信息响应消息
-message UserInfoResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-  User user = 2;
-}
-
-// 删除用户请求消息
-message UserDeleteReq {
-  // 用户唯一标识符
-  int32 user_id = 1;
-}
-
-// 删除用户响应消息
-message UserDeleteResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-}
-
-// 用户服务定义
+// 用户服务
 service UserService {
-  // 用户注册
-  rpc Register(RegisterReq) returns (RegisterResp) {}
-  // 用户登录
-  rpc Login(LoginReq) returns (LoginResp) {}
+  // 注册用户
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  // 登录用户
+  rpc Login(LoginRequest) returns (LoginResponse);
   // 获取用户信息
-  rpc UserInfo(UserInfoReq) returns (UserInfoResp) {}
-  // 删除用户
-  rpc DeleteUser(UserDeleteReq) returns (UserDeleteResp) {}
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+}
+
+// 用户信息
+message User {
+  int64 id = 1;           // 用户id
+  string username = 2;    // 用户名
+  string password = 3;    // 密码
+  string email = 4;       // 邮箱
+  string phone = 5;       // 手机号
+}
+
+// 注册请求
+message RegisterRequest {
+  string username = 1;    // 用户名
+  string password = 2;    // 密码
+  string password_confirm = 3; // 确认密码
+  string email = 4;       // 邮箱
+  string phone = 5;       // 手机号
+}
+
+// 注册返回
+message RegisterResponse {
+  User user = 1;          // 注册成功的用户信息
+  CommonResponse CommonResponse = 2;
+}
+
+// 登录请求
+message LoginRequest {
+  string username = 1;    // 用户名
+  string password = 2;    // 密码
+}
+
+// 登录返回
+message LoginResponse {
+  string token = 1;       // 登录令牌
+  CommonResponse CommonResponse = 2;
+}
+
+// 获取用户信息请求
+message GetUserRequest {
+  int64 id = 1;           // 用户ID
+}
+
+// 获取用户信息返回
+message GetUserResponse {
+  User user = 1;          // 用户信息
+  CommonResponse CommonResponse = 2;
+} 
+
+// 统一返回消息
+message CommonResponse {
+  int32 code = 1;          // 状态码
+  string message = 2;      // 消息
 }

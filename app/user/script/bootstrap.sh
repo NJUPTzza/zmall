@@ -1,5 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 CURDIR=$(cd $(dirname $0); pwd)
-BinaryName=user
-echo "$CURDIR/bin/${BinaryName}"
-exec $CURDIR/bin/${BinaryName}
+echo "$CURDIR/bin/user"
+exec "$CURDIR/bin/user"

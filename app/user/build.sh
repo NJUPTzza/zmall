@@ -1,7 +1,7 @@
-#!/bin/bash
-RUN_NAME=user
+#!/usr/bin/env bash
+RUN_NAME="user"
 mkdir -p output/bin output/conf
-cp script/bootstrap.sh output 2>/dev/null
-chmod +x output/bootstrap.sh
+cp script/* output/
 cp -r conf/* output/conf
+chmod +x output/bootstrap.sh
 go build -o output/bin/${RUN_NAME}

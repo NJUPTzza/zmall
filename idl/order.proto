@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package order;
+
+option go_package = "/order";
+
+// 订单服务
+service OrderService {
+  // 创建订单
+  rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+  // 获取订单详情
+  rpc GetOrder(GetOrderRequest) returns (GetOrderResponse);
+}
+
+// 订单信息
+message Order {
+  int64 id = 1;           // 订单ID
+  int64 user_id = 2;      // 用户ID
+  int64 product_id = 3;   // 商品ID
+  int32 quantity = 4;     // 购买数量
+  float total_price = 5;  // 总价
+  string status = 6;      // 订单状态（例如 "pending", "completed"）
+}
+
+// 创建订单请求
+message CreateOrderRequest {
+  int64 user_id = 1;      // 用户ID
+  int64 product_id = 2;   // 商品ID
+  int32 quantity = 3;     // 购买数量
+}
+
+// 创建订单返回
+message CreateOrderResponse {
+  Order order = 1;        // 创建的订单信息
+}
+
+// 获取订单请求
+message GetOrderRequest {
+  int64 id = 1;           // 订单ID
+}
+
+// 获取订单返回
+message GetOrderResponse {
+  Order order = 1;        // 订单信息
+}

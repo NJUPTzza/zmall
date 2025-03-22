@@ -1,297 +1,43 @@
-// 产品模块
 syntax = "proto3";
 
 package product;
 
-// 生成 Go 代码时的包路径
 option go_package = "/product";
 
-// 定义产品状态枚举
-enum Status {
-  // 产品在线，可被用户访问和购买
-  ONLINE = 0;
-  // 产品离线，用户无法访问和购买
-  OFFLINE = 1;
-  // 产品已删除
-  DELETED = 2;
+// 商品服务
+service ProductService {
+  // 获取商品列表
+  rpc ListProducts(ListProductsRequest) returns (ListProductsResponse);
+  // 获取商品详情
+  rpc GetProduct(GetProductRequest) returns (GetProductResponse);
 }
 
-// 定义产品消息
+// 商品信息
 message Product {
-  // 产品唯一标识符
-  uint32 id = 1;
-  // 产品名称
-  string name = 2;
-  // 产品标准产品单元名称
-  string spu_name = 3;
-  // 产品描述
-  string description = 4;
-  // 产品图片链接
-  string picture = 5;
-  // 产品价格
-  float price = 6;
-  // 产品标准产品单元价格
-  float spu_price = 7;
-  // 产品库存数量
-  uint32 stock = 8;
-  // 产品状态
-  Status status = 9;
-  // 产品所属类别名称列表
-  repeated string categories = 10;
+  int64 id = 1;           // 商品ID
+  string name = 2;        // 商品名称
+  float price = 3;        // 商品价格
+  int32 stock = 4;        // 库存数量
 }
 
-// 定义产品类别消息
-message Category {
-  // 类别唯一标识符
-  uint32 id = 1;
-  // 类别名称
-  string name = 2;
-  // 类别描述
-  string description = 3;
+// 请求商品列表
+message ListProductsRequest {
+  int32 page = 1;         // 页码
+  int32 page_size = 2;    // 每页数量
 }
 
-// 通用响应消息，包含错误码和错误信息
-message CommonResp {
-  // 错误码，0 表示成功，非 0 表示失败
-  int32 code = 1;
-  // 错误信息
-  string message = 2;
+// 返回商品列表
+message ListProductsResponse {
+  repeated Product products = 1;  // 商品列表
+  int32 total = 2;                // 总数
 }
 
-// 添加产品请求消息
-message AddProductReq {
-  // 产品名称
-  string name = 1;
-  // 产品标准产品单元名称
-  string spu_name = 2;
-  // 产品描述
-  string description = 3;
-  // 产品图片链接
-  string picture = 4;
-  // 产品价格
-  float price = 5;
-  // 产品标准产品单元价格
-  float spu_price = 6;
-  // 产品库存数量
-  uint32 stock = 7;
-  // 产品所属类别 ID 列表
-  repeated uint32 category_ids = 8;
+// 请求商品详情
+message GetProductRequest {
+  int64 id = 1;           // 商品ID
 }
 
-// 添加产品响应消息
-message AddProductResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-  // 新增产品的唯一标识符
-  uint32 id = 2;
-}
-
-// 更新产品请求消息
-message UpdateProductReq {
-  // 产品唯一标识符
-  uint32 id = 1;
-  // 产品名称
-  string name = 2;
-  // 产品标准产品单元名称
-  string spu_name = 3;
-  // 产品描述
-  string description = 4;
-  // 产品图片链接
-  string picture = 5;
-  // 产品价格
-  float price = 6;
-  // 产品标准产品单元价格
-  float spu_price = 7;
-  // 产品库存数量
-  uint32 stock = 8;
-  // 产品所属类别 ID 列表
-  repeated uint32 category_ids = 9;
-}
-
-// 更新产品响应消息
-message UpdateProductResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-}
-
-// 删除产品请求消息
-message DeleteProductReq {
-  // 产品唯一标识符
-  uint32 id = 1;
-}
-
-// 删除产品响应消息
-message DeleteProductResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-}
-
-// 上线产品请求消息
-message OnlineProductReq {
-  // 产品唯一标识符
-  uint32 id = 1;
-}
-
-// 上线产品响应消息
-message OnlineProductResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-}
-
-// 下线产品请求消息
-message OfflineProductReq {
-  // 产品唯一标识符
-  uint32 id = 1;
-}
-
-// 下线产品响应消息
-message OfflineProductResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-}
-
-// 列表查询产品请求消息
-message ListProductsReq {
-  // 页码，从 1 开始
-  int32 page = 1;
-  // 每页数量
-  int64 pageSize = 2;
-  // 类别 ID，用于筛选特定类别的产品
-  uint32 category_id = 3;
-  // 用户角色，可用于权限控制
-  string role = 4;
-}
-
-// 列表查询产品响应消息
-message ListProductsResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-  // 产品列表
-  repeated Product products = 2;
-}
-
-// 获取单个产品请求消息
-message GetProductReq {
-  // 产品唯一标识符
-  uint32 id = 1;
-}
-
-// 获取单个产品响应消息
-message GetProductResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-  // 产品信息
-  Product product = 2;
-}
-
-// 批量获取产品请求消息
-message BatchGetProductsReq {
-  // 产品唯一标识符列表
-  repeated uint32 ids = 1;
-}
-
-// 批量获取产品响应消息
-message BatchGetProductsResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-  // 产品映射，键为产品 ID，值为产品信息
-  map<uint32, Product> products = 2;
-}
-
-// 搜索产品请求消息
-message SearchProductsReq {
-  // 搜索关键词
-  string query = 1;
-}
-
-// 搜索产品响应消息
-message SearchProductsResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-  // 搜索结果产品列表
-  repeated Product results = 2;
-}
-
-// 获取所有类别请求消息
-message GetCategoriesReq {
-}
-
-// 获取所有类别响应消息
-message GetCategoriesResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-  // 类别列表
-  repeated Category categories = 2;
-}
-
-// 获取单个类别请求消息
-message GetCategoryReq {
-  // 类别唯一标识符
-  uint32 id = 1;
-}
-
-// 获取单个类别响应消息
-message GetCategoryResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-  // 类别信息
-  Category category = 2;
-}
-
-// 减少库存请求消息
-message DecrStockReq {
-  // 产品唯一标识符
-  uint32 id = 1;
-  // 减少的库存数量
-  uint32 decr = 2;
-}
-
-// 减少库存响应消息
-message DecrStockResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-}
-
-// 增加库存请求消息
-message IncrStockReq {
-  // 产品唯一标识符
-  uint32 id = 1;
-  // 增加的库存数量
-  uint32 incr = 2;
-}
-
-// 增加库存响应消息
-message IncrStockResp {
-  // 通用响应信息
-  CommonResp common_resp = 1;
-}
-
-// 产品目录服务定义
-service ProductCatalogService {
-  // 添加产品
-  rpc AddProduct(AddProductReq) returns (AddProductResp) {}
-  // 更新产品
-  rpc UpdateProduct(UpdateProductReq) returns (UpdateProductResp) {}
-  // 删除产品
-  rpc DeleteProduct(DeleteProductReq) returns (DeleteProductResp) {}
-  // 上线产品
-  rpc OnlineProduct(OnlineProductReq) returns (OnlineProductResp) {}
-  // 下线产品
-  rpc OfflineProduct(OfflineProductReq) returns (OfflineProductResp) {}
-  // 列表查询产品
-  rpc ListProducts(ListProductsReq) returns (ListProductsResp) {}
-  // 获取单个产品
-  rpc GetProduct(GetProductReq) returns (GetProductResp) {}
-  // 批量获取产品
-  rpc BatchGetProducts(BatchGetProductsReq) returns (BatchGetProductsResp) {}
-  // 搜索产品
-  rpc SearchProducts(SearchProductsReq) returns (SearchProductsResp) {}
-  // 获取所有类别
-  rpc GetCategories(GetCategoriesReq) returns (GetCategoriesResp) {}
-  // 获取单个类别
-  rpc GetCategory(GetCategoryReq) returns (GetCategoryResp) {}
-  // 减少库存
-  rpc DecrStock(DecrStockReq) returns (DecrStockResp) {}
-  // 增加库存
-  rpc IncrStock(IncrStockReq) returns (IncrStockResp) {}
+// 返回商品详情
+message GetProductResponse {
+  Product product = 1;    // 商品信息
 }

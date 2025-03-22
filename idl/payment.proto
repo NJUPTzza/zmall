@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package payment;
+
+option go_package = "/payment";
+
+// 支付服务
+service PaymentService {
+  // 发起支付
+  rpc ProcessPayment(ProcessPaymentRequest) returns (ProcessPaymentResponse);
+  // 查询支付状态
+  rpc GetPaymentStatus(GetPaymentStatusRequest) returns (GetPaymentStatusResponse);
+}
+
+// 支付信息
+message Payment {
+  int64 id = 1;           // 支付ID
+  int64 order_id = 2;     // 订单ID
+  float amount = 3;       // 支付金额
+  string status = 4;      // 支付状态（"pending", "completed", "failed"）
+}
+
+// 发起支付请求
+message ProcessPaymentRequest {
+  int64 order_id = 1;     // 订单ID
+  float amount = 2;       // 支付金额
+}
+
+// 发起支付返回
+message ProcessPaymentResponse {
+  Payment payment = 1;    // 支付信息
+}
+
+// 查询支付状态请求
+message GetPaymentStatusRequest {
+  int64 payment_id = 1;   // 支付ID
+}
+
+// 查询支付状态返回
+message GetPaymentStatusResponse {
+  Payment payment = 1;    // 支付信息
+}
