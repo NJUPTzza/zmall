@@ -4,25 +4,30 @@ import (
 	"net"
 	"time"
 
-	"github.com/joho/godotenv"
+	"github.com/NJUPTzza/zmall/app/user/biz/dal"
+	"github.com/NJUPTzza/zmall/app/user/conf"
+	"github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/user/userservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
+	"github.com/joho/godotenv"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
-	"github.com/NJUPTzza/zmall/app/user/conf"
-	"github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/user/userservice"
+	etcd "github.com/kitex-contrib/registry-etcd"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
-	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
 func main() {
-	_ = godotenv.Load()
+	err := godotenv.Load()
+	if err != nil {
+		klog.Error(err.Error())
+	}
+	dal.Init()
 	opts := kitexInit()
 
 	svr := userservice.NewServer(new(UserServiceImpl), opts...)
 
-	err := svr.Run()
+	err = svr.Run()
 	if err != nil {
 		klog.Error(err.Error())
 	}

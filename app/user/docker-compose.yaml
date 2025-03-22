@@ -1,7 +1,7 @@
 version: '3'
 services:
   etcd:
-    image: bitnami/etcd:latest
+    image: bitnami/etcd:3.5.9
     container_name: etcd
     ports:
       - 2379:2379
@@ -11,15 +11,18 @@ services:
       - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379  # 客户端访问地址
 
   mysql:
-    image: 'mysql:latest'
+    image: 'mysql:8.0.33'
     ports:
       - 3306:3306
     environment:
-      - MYSQL_DATABASE=gorm
-      - MYSQL_USER=gorm
-      - MYSQL_PASSWORD=gorm
-      - MYSQL_RANDOM_ROOT_PASSWORD="yes"
+      - MYSQL_DATABASE=zmall
+      - MYSQL_USER=zza
+      - MYSQL_PASSWORD=123456
+      - MYSQL_ROOT_PASSWORD=123456  # 设置 root 用户密码
+
   redis:
-    image: 'redis:latest'
+    image: 'redis:7.0.11'
     ports:
       - 6379:6379
+      
+

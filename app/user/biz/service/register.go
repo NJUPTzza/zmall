@@ -20,8 +20,12 @@ func NewRegisterService(ctx context.Context) *RegisterService {
 // Run create note info
 func (s *RegisterService) Run(req *user.RegisterRequest) (resp *user.RegisterResponse, err error) {
 	// Finish your business logic.
+	if req.Username == "" || req.Password == "" || req.PasswordConfirm == "" || req.Email == "" || req.Phone == "" {
+		return nil, errors.New("all fields are required")
+	}	
+
 	if req.Password != req.PasswordConfirm {
-		return nil, errors.New("password not match")
+		return nil, errors.New("password and password confirmation do not match")
 	}
 	passwordHashed, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -31,21 +35,22 @@ func (s *RegisterService) Run(req *user.RegisterRequest) (resp *user.RegisterRes
 		Username: req.Username,
 		PasswordHashed: string(passwordHashed),
 		Email: req.Email,
+		Phone: req.Phone,
 	}
 	err = model.Create(mysql.DB, newUser)
 	if err != nil {
 		return nil, err
 	}
 	return &user.RegisterResponse{
+		User: &user.User{
+			Id: int64(newUser.ID),
+			Username: req.Username,
+			Email: req.Email,
+			Phone: req.Phone,
+		},
 		CommonResponse: &user.CommonResponse {
 			Code: 200,
 			Message: "register success",
 		},	
-		User: &user.User{
-			Id: int64(newUser.ID),
-			Username: req.Username,
-			Password: req.Password,
-			Email: req.Email,
-		},
 	}, nil
 }
