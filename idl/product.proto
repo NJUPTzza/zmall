@@ -28,8 +28,9 @@ message ListProductsRequest {
 
 // 返回商品列表
 message ListProductsResponse {
-  repeated Product products = 1;  // 商品列表
-  int32 total = 2;                // 总数
+  CommonResponse CommonResponse = 1;
+  repeated Product products = 2;  // 商品列表
+  int32 total = 3;                // 总数
 }
 
 // 请求商品详情
@@ -39,5 +40,12 @@ message GetProductRequest {
 
 // 返回商品详情
 message GetProductResponse {
-  Product product = 1;    // 商品信息
+  CommonResponse CommonResponse = 1;
+  Product product = 2;    // 商品信息
+}
+
+// 统一返回消息
+message CommonResponse {
+  int32 code = 1;          // 状态码
+  string message = 2;      // 消息
 }

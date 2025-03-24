@@ -4,30 +4,22 @@ import (
 	"net"
 	"time"
 
-	"github.com/NJUPTzza/zmall/app/user/biz/dal"
-	"github.com/NJUPTzza/zmall/app/user/conf"
-	"github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/user/userservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
-	"github.com/joho/godotenv"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
-	etcd "github.com/kitex-contrib/registry-etcd"
+	"github.com/NJUPTzza/zmall/app/product/conf"
+	"github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/product/productservice"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		klog.Error(err.Error())
-	}
-	dal.Init()
 	opts := kitexInit()
 
-	svr := userservice.NewServer(new(UserServiceImpl), opts...)
+	svr := productservice.NewServer(new(ProductServiceImpl), opts...)
 
-	err = svr.Run()
+	err := svr.Run()
 	if err != nil {
 		klog.Error(err.Error())
 	}
@@ -45,15 +37,7 @@ func kitexInit() (opts []server.Option) {
 	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
 		ServiceName: conf.GetConf().Kitex.Service,
 	}))
-	r, err := etcd.NewEtcdRegistry(conf.GetConf().Registry.RegistryAddress)
-	if err != nil {
-		klog.Fatal("Failed to initialize Etcd registry: %v", err)
-	}
-	opts = append(opts, server.WithRegistry(r))
 
-	klog.Infof("Service Name: %s", conf.GetConf().Kitex.Service)
-	klog.Infof("Etcd Address: %v", conf.GetConf().Registry.RegistryAddress)
-	
 	// klog
 	logger := kitexlogrus.NewLogger()
 	klog.SetLogger(logger)
