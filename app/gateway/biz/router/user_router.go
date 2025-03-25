@@ -25,5 +25,5 @@ func userRegister(r *server.Hertz) {
 
 	r.POST("/api/v1/register", handler.Register(client))
 	r.POST("/api/v1/login", handler.Login(client))
-	r.GET("/api/v1/getuser", handler.GetUser(client))
+	r.GET("/api/v1/user", handler.GetUser(client))
 }

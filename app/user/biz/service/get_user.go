@@ -15,6 +15,5 @@ func NewGetUserService(ctx context.Context) *GetUserService {
 // Run create note info
 func (s *GetUserService) Run(req *user.GetUserRequest) (resp *user.GetUserResponse, err error) {
 	// Finish your business logic.
-
 	return
 }
