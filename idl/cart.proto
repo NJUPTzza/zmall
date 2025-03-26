@@ -12,6 +12,10 @@ service CartService {
   rpc GetCart(GetCartRequest) returns (GetCartResponse);
   // 删除购物车中的商品
   rpc RemoveFromCart(RemoveFromCartRequest) returns (RemoveFromCartResponse);
+  // 修改商品数量
+  rpc UpdateItemQuantity(UpdateQuantityRequest) returns (UpdateQuantityResponse); 
+  // 清空购物车
+  rpc ClearCart(ClearCartRequest) returns (ClearCartResponse);
 }
 
 // 购物车项
@@ -30,7 +34,8 @@ message AddToCartRequest {
 
 // 添加到购物车返回
 message AddToCartResponse {
-  CartItem item = 1;      // 添加的购物车项
+  CommonResponse commonResponse = 1;
+  CartItem item = 2;      // 添加的购物车项
 }
 
 // 获取购物车请求
@@ -40,16 +45,43 @@ message GetCartRequest {
 
 // 获取购物车返回
 message GetCartResponse {
-  repeated CartItem items = 1;  // 购物车项列表
+  CommonResponse commonResponse = 1;
+  repeated CartItem items = 2;  // 购物车项列表
+}
+
+// 修改数量请求
+message UpdateQuantityRequest {
+  int64 user_id = 1;
+  int64 item_id = 2;              // 购物车项ID
+  int32 new_quantity = 3;         // 新数量（0表示删除）
+}
+
+message UpdateQuantityResponse {
+  CommonResponse commonResponse = 1;
 }
 
 // 删除购物车项请求
 message RemoveFromCartRequest {
   int64 user_id = 1;      // 用户ID
-  int64 product_id = 2;   // 商品ID
+  int64 item_id = 2;   // 购物车项ID
 }
 
 // 删除购物车项返回
 message RemoveFromCartResponse {
-  bool success = 1;       // 是否成功
+  CommonResponse commonResponse = 1;
+}
+
+// 清空购物车请求
+message ClearCartRequest {
+  int64 user_id = 1;
+}
+
+message ClearCartResponse {
+  CommonResponse commonResponse = 1;
+}
+
+// 统一返回消息
+message CommonResponse {
+  int32 code = 1;          // 状态码
+  string message = 2;      // 消息
 }

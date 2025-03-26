@@ -23,3 +23,9 @@ func GetByUsername(db *gorm.DB, username string) (*User, error) {
 	err := db.Where("username = ?", username).First(&user).Error
 	return &user, err
 }
+
+func GetUserById(db *gorm.DB, id int64) (*User, error) {
+	var user User
+	err := db.Where("id = ?", id).First(&user).Error
+	return &user, err
+}

@@ -1,6 +1,6 @@
 kitex:
-  service: "user"
-  address: ":8888"
+  service: "cart_service"
+  address: ":8890"
   log_level: info
   log_file_name: "log/kitex.log"
   log_max_size: 10
