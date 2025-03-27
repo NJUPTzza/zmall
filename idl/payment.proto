@@ -12,23 +12,35 @@ service PaymentService {
   rpc GetPaymentStatus(GetPaymentStatusRequest) returns (GetPaymentStatusResponse);
 }
 
+// 支付状态
+enum PaymentStatus {
+  UNKNOWN = 0;
+  PENDING = 1;     // 待支付
+  PAID = 2;        // 已支付
+  FAILED = 3;      // 支付失败
+  REFUNDED = 4;    // 已退款
+}
+
 // 支付信息
 message Payment {
   int64 id = 1;           // 支付ID
   int64 order_id = 2;     // 订单ID
   float amount = 3;       // 支付金额
-  string status = 4;      // 支付状态（"pending", "completed", "failed"）
+  PaymentStatus status = 4;
 }
 
 // 发起支付请求
 message ProcessPaymentRequest {
   int64 order_id = 1;     // 订单ID
   float amount = 2;       // 支付金额
+  string pay_channel = 3; // 支付渠道，如 "wechat"、"alipay"
 }
 
 // 发起支付返回
 message ProcessPaymentResponse {
-  Payment payment = 1;    // 支付信息
+  CommonResponse commonResponse = 1;
+  Payment payment = 2;    // 支付信息
+  string pay_url = 3;     // 跳转到第三方支付的URL (H5, Native, QRCode)
 }
 
 // 查询支付状态请求
@@ -38,5 +50,20 @@ message GetPaymentStatusRequest {
 
 // 查询支付状态返回
 message GetPaymentStatusResponse {
-  Payment payment = 1;    // 支付信息
+  CommonResponse commonResponse = 1;
+  Payment payment = 2;    // 支付信息
+}
+
+// 支付成功 MQ 通知 Event
+message PaymentSuccessMessage {
+  int64 payment_id = 1;
+  int64 order_id = 2;
+  float amount = 3;
+  string payment_status = 4; // 一般都是 "completed"
+}
+
+// 统一返回消息
+message CommonResponse {
+  int32 code = 1;          // 状态码
+  string message = 2;      // 消息
 }

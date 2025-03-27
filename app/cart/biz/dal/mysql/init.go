@@ -24,7 +24,7 @@ func Init() {
 			SkipDefaultTransaction: true,
 		},
 	)
-	DB.AutoMigrate(&model.Product{})
+	DB.AutoMigrate(&model.Cart{})
 	if err != nil {
 		panic(err)
 	}

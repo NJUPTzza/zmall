@@ -28,19 +28,19 @@ func (s *ListProductsService) Run(req *product.ListProductsRequest) (resp *produ
 		return nil, err
 	}
 	resp = &product.ListProductsResponse{
-		Products: make([]*product.Product, 0, len(products)),
+		Products: make([]*product.Product, len(products)),
 		CommonResponse: &product.CommonResponse{
-			Code: 200,
-			Message: "get product list success",
+			Code:    200,
+			Message: "获取商品列表成功",
 		},
 	}
-	for _, p := range products {
-		resp.Products = append(resp.Products, &product.Product{
-			Id: int64(p.ID),
-			Name: p.Name,
+	for i, p := range products {
+		resp.Products[i] = &product.Product{
+			Id:    int64(p.ID),
+			Name:  p.Name,
 			Price: float32(p.Price),
 			Stock: int32(p.Stock),
-		})
+		}
 	}
 	return resp, nil
 }

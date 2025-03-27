@@ -2,16 +2,20 @@ package main
 
 import (
 	"context"
-	cart "github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/cart"
+
 	"github.com/NJUPTzza/zmall/app/cart/biz/service"
+	cart "github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/cart"
+	"github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/product/productservice"
 )
 
 // CartServiceImpl implements the last service interface defined in the IDL.
-type CartServiceImpl struct{}
+type CartServiceImpl struct{
+	productClient productservice.Client
+}
 
 // AddToCart implements the CartServiceImpl interface.
 func (s *CartServiceImpl) AddToCart(ctx context.Context, req *cart.AddToCartRequest) (resp *cart.AddToCartResponse, err error) {
-	resp, err = service.NewAddToCartService(ctx).Run(req)
+	resp, err = service.NewAddToCartService(ctx, s.productClient).Run(req)
 
 	return resp, err
 }

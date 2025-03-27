@@ -3,12 +3,16 @@ package service
 import (
 	"context"
 	"testing"
+
 	cart "github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/cart"
+	"github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/product/productservice"
 )
 
 func TestAddToCart_Run(t *testing.T) {
 	ctx := context.Background()
-	s := NewAddToCartService(ctx)
+	cli, err := productservice.NewClient("")
+	
+	s := NewAddToCartService(ctx, cli)
 	// init req and assert value
 
 	req := &cart.AddToCartRequest{}

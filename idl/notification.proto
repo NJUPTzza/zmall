@@ -16,6 +16,7 @@ service NotificationService {
 message Notification {
   int64 id = 1;           // 通知ID
   int64 user_id = 2;      // 用户ID
+  string type = 3;        // 通知类型（例如 "payment_success", "order_created"）
   string content = 3;     // 通知内容
   int64 timestamp = 4;    // 发送时间戳
   bool read = 5;          // 是否已读
@@ -24,12 +25,14 @@ message Notification {
 // 发送通知请求
 message SendNotificationRequest {
   int64 user_id = 1;      // 用户ID
-  string content = 2;     // 通知内容
+  string type = 2;
+  string content = 3;     // 通知内容
 }
 
 // 发送通知返回
 message SendNotificationResponse {
-  Notification notification = 1;  // 发送的通知
+  CommonResponse commonResponse = 1;
+  Notification notification = 2;  // 发送的通知
 }
 
 // 获取通知请求
@@ -39,5 +42,6 @@ message GetNotificationsRequest {
 
 // 获取通知返回
 message GetNotificationsResponse {
-  repeated Notification notifications = 1;  // 通知列表
+  CommonResponse commonResponse = 1;
+  repeated Notification notifications = 2;  // 通知列表
 }
