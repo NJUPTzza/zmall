@@ -5,7 +5,6 @@ import (
 	"errors"
 
 	"github.com/NJUPTzza/zmall/app/user/biz/dal/mysql"
-	"github.com/NJUPTzza/zmall/app/user/biz/model"
 	user "github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/user"
 	"gorm.io/gorm"
 )
@@ -23,7 +22,7 @@ func (s *GetUserService) Run(req *user.GetUserRequest) (resp *user.GetUserRespon
 	if req.Id == 0 {
 		return nil, errors.New("id is empty")
 	}
-	userDetail, err := model.GetUserById(mysql.DB, req.Id)
+	userDetail, err := mysql.GetUserById(mysql.DB, req.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return &user.GetUserResponse{

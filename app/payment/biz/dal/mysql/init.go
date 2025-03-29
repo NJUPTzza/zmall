@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/NJUPTzza/zmall/app/payment/biz/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -22,6 +23,7 @@ func Init() {
 			SkipDefaultTransaction: true,
 		},
 	)
+	DB.AutoMigrate(&model.Payment{})
 	if err != nil {
 		panic(err)
 	}

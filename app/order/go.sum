@@ -1,7 +1,7 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250328044617-15d5e5159f9a h1:/okxM9OkOpTdbae4mB/nMYqkOmrDR/vDMna+vB38hYY=
-github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250328044617-15d5e5159f9a/go.mod h1:Qbsnq/8slguzDXjSbWTAUG3d5yKuw3sMQE1kPpHR8GA=
+github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250329053216-29e25b64c6d8 h1:blBkXVvTZBx5kau9XT4DVWsrkkgpaRZuPJkepYbhM/Q=
+github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250329053216-29e25b64c6d8/go.mod h1:Qbsnq/8slguzDXjSbWTAUG3d5yKuw3sMQE1kPpHR8GA=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=
 github.com/bsm/ginkgo/v2 v2.12.0 h1:Ny8MWAHyOepLGlLKYmXG4IEkioBysk6GpaRTLC8zwWs=

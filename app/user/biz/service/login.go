@@ -5,7 +5,6 @@ import (
 	"errors"
 
 	"github.com/NJUPTzza/zmall/app/user/biz/dal/mysql"
-	"github.com/NJUPTzza/zmall/app/user/biz/model"
 	user "github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/user"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -23,7 +22,7 @@ func (s *LoginService) Run(req *user.LoginRequest) (resp *user.LoginResponse, er
 	if req.Username == "" || req.Password == "" {
 		return nil, errors.New("username or password is empty")
 	}
-	row, err := model.GetByUsername(mysql.DB, req.Username)
+	row, err := mysql.GetByUsername(mysql.DB, req.Username)
 	if err != nil {
 		return nil, err
 	}

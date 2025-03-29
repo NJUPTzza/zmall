@@ -8,7 +8,7 @@ import (
 
 func TestCreateOrder_Run(t *testing.T) {
 	ctx := context.Background()
-	s := NewCreateOrderService(ctx)
+	s := NewCreateOrderService(ctx, nil)
 	// init req and assert value
 
 	req := &order.CreateOrderRequest{}

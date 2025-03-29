@@ -6,6 +6,6 @@ import (
 )
 
 func Init() {
-	redis.Init()
 	mysql.Init()
+	redis.Init()
 }

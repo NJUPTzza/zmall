@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/NJUPTzza/zmall/app/cart/biz/dal/mysql"
-	"github.com/NJUPTzza/zmall/app/cart/biz/model"
 	cart "github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/cart"
 	"github.com/cloudwego/kitex/pkg/klog"
 )
@@ -20,7 +19,7 @@ func NewGetCartService(ctx context.Context) *GetCartService {
 
 // Run create note info
 func (s *GetCartService) Run(req *cart.GetCartRequest) (resp *cart.GetCartResponse, err error) {
-	cartItems, err := model.GetCartItems(mysql.DB, req.UserId)
+	cartItems, err := mysql.GetCartItems(mysql.DB, req.UserId)
 	if err != nil {
 		klog.Error(err)
 		return nil, err

@@ -60,7 +60,7 @@ func (s *AddToCartService) Run(req *cart.AddToCartRequest) (resp *cart.AddToCart
 		ProductId: req.ProductId,
 		Quantity: req.Quantity,
 	}
-	err = model.Create(mysql.DB, newCartItem)
+	err = mysql.Create(mysql.DB, newCartItem)
 	if err != nil {
 		return nil, err
 	}

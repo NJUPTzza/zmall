@@ -5,7 +5,6 @@ import (
 	"errors"
 
 	"github.com/NJUPTzza/zmall/app/product/biz/dal/mysql"
-	"github.com/NJUPTzza/zmall/app/product/biz/model"
 	product "github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/product"
 	"gorm.io/gorm"
 )
@@ -23,7 +22,7 @@ func (s *GetProductService) Run(req *product.GetProductRequest) (resp *product.G
 	if req.Id == 0 {
 		return nil, errors.New("id is empty")
 	}
-	productDetail, err := model.GetProductById(mysql.DB, req.Id)
+	productDetail, err := mysql.GetProductById(mysql.DB, req.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return &product.GetProductResponse{

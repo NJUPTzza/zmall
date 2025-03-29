@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/NJUPTzza/zmall/app/product/biz/dal/mysql"
-	"github.com/NJUPTzza/zmall/app/product/biz/model"
 	product "github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/product"
 	"github.com/cloudwego/kitex/pkg/klog"
 )
@@ -22,7 +21,7 @@ func (s *ListProductsService) Run(req *product.ListProductsRequest) (resp *produ
 	page := int(req.Page)
 	pageSize := int(req.PageSize)
 	
-	products, err := model.GetProductsByPage(mysql.DB, page, pageSize)
+	products, err := mysql.GetProductsByPage(mysql.DB, page, pageSize)
 	if err != nil {
 		klog.Error(err)
 		return nil, err

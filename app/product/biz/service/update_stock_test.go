@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"testing"
 	product "github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/product"
+	"testing"
 )
 
 func TestUpdateStock_Run(t *testing.T) {
@@ -17,5 +17,5 @@ func TestUpdateStock_Run(t *testing.T) {
 	t.Logf("resp: %v", resp)
 
 	// todo: edit your unit test
-
+	
 }

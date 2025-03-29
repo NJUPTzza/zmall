@@ -37,7 +37,7 @@ func (s *RegisterService) Run(req *user.RegisterRequest) (resp *user.RegisterRes
 		Email: req.Email,
 		Phone: req.Phone,
 	}
-	err = model.Create(mysql.DB, newUser)
+	err = mysql.Create(mysql.DB, newUser)
 	if err != nil {
 		return nil, err
 	}
