@@ -10,6 +10,8 @@ service ProductService {
   rpc ListProducts(ListProductsRequest) returns (ListProductsResponse);
   // 获取商品详情
   rpc GetProduct(GetProductRequest) returns (GetProductResponse);
+  // 更新库存
+  rpc UpdateStock(UpdateStockRequest) returns (UpdateStockResponse);
 }
 
 // 商品信息
@@ -42,6 +44,17 @@ message GetProductRequest {
 message GetProductResponse {
   CommonResponse CommonResponse = 1;
   Product product = 2;    // 商品信息
+}
+
+// 更新库存请求
+message UpdateStockRequest {
+  int64 product_id = 1;   // 商品ID
+  int32 change = 2;       // 变更库存（可正可负）
+}
+
+// 更新库存响应
+message UpdateStockResponse {
+  CommonResponse CommonResponse = 1;
 }
 
 // 统一返回消息

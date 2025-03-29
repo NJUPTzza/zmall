@@ -1,13 +1,13 @@
 package main
 
 import (
+	"gopkg.in/natefinch/lumberjack.v2"
 	"net"
 	"time"
 
 	"github.com/NJUPTzza/zmall/app/order/biz/dal"
 	"github.com/NJUPTzza/zmall/app/order/conf"
 	"github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/order/orderservice"
-	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
@@ -15,7 +15,6 @@ import (
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"go.uber.org/zap/zapcore"
-	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func main() {
@@ -51,7 +50,7 @@ func kitexInit() (opts []server.Option) {
 		klog.Fatal("Failed to initialize Etcd registry: %v", err)
 	}
 	opts = append(opts, server.WithRegistry(r))
-	
+
 	klog.Infof("Service Name: %s", conf.GetConf().Kitex.Service)
 	klog.Infof("Etcd Address: %v", conf.GetConf().Registry.RegistryAddress)
 

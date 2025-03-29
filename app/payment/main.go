@@ -4,22 +4,30 @@ import (
 	"net"
 	"time"
 
+	"github.com/NJUPTzza/zmall/app/payment/biz/dal"
+	"github.com/NJUPTzza/zmall/app/payment/conf"
+	"github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/payment/paymentservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
+	"github.com/joho/godotenv"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
-	"github.com/NJUPTzza/zmall/app/payment/conf"
-	"github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/payment/paymentservice"
+	etcd "github.com/kitex-contrib/registry-etcd"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		klog.Error(err.Error())
+	}
+	dal.Init()
 	opts := kitexInit()
 
 	svr := paymentservice.NewServer(new(PaymentServiceImpl), opts...)
 
-	err := svr.Run()
+	err = svr.Run()
 	if err != nil {
 		klog.Error(err.Error())
 	}
@@ -37,6 +45,13 @@ func kitexInit() (opts []server.Option) {
 	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
 		ServiceName: conf.GetConf().Kitex.Service,
 	}))
+	r, err := etcd.NewEtcdRegistry(conf.GetConf().Registry.RegistryAddress)
+	if err != nil {
+		klog.Fatal("Failed to initialize Etcd registry: %v", err)
+	}
+	opts = append(opts, server.WithRegistry(r))
+	klog.Infof("Service Name: %s", conf.GetConf().Kitex.Service)
+	klog.Infof("Etcd Address: %v", conf.GetConf().Registry.RegistryAddress)
 
 	// klog
 	logger := kitexlogrus.NewLogger()

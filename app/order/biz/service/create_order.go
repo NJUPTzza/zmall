@@ -14,7 +14,8 @@ func NewCreateOrderService(ctx context.Context) *CreateOrderService {
 
 // Run create note info
 func (s *CreateOrderService) Run(req *order.CreateOrderRequest) (resp *order.CreateOrderResponse, err error) {
-	// Finish your business logic.
+	// 1. 查看商品库存
+	product, err := 
 
 	return
 }
