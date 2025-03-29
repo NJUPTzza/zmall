@@ -30,3 +30,17 @@ func GetProductById(db *gorm.DB, id int64) (*Product, error) {
 	err := db.Where("id = ?", id).First(&product).Error
 	return &product, err
 }
+
+func UpdateStock(db *gorm.DB, productID int64, quantity int32, increase bool) error {
+	if increase {
+		// 增加库存
+		return db.Model(&Product{}).
+			Where("id = ?", productID).
+			Update("stock", gorm.Expr("stock + ?", quantity)).Error
+	} else {
+		// 减少库存
+		return db.Model(&Product{}).
+			Where("id = ? AND stock >= ?", productID, quantity).
+			Update("stock", gorm.Expr("stock - ?", quantity)).Error
+	}
+}

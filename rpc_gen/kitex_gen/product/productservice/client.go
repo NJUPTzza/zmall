@@ -13,6 +13,7 @@ import (
 type Client interface {
 	ListProducts(ctx context.Context, Req *product.ListProductsRequest, callOptions ...callopt.Option) (r *product.ListProductsResponse, err error)
 	GetProduct(ctx context.Context, Req *product.GetProductRequest, callOptions ...callopt.Option) (r *product.GetProductResponse, err error)
+	UpdateStock(ctx context.Context, Req *product.UpdateStockRequest, callOptions ...callopt.Option) (r *product.UpdateStockResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -52,4 +53,9 @@ func (p *kProductServiceClient) ListProducts(ctx context.Context, Req *product.L
 func (p *kProductServiceClient) GetProduct(ctx context.Context, Req *product.GetProductRequest, callOptions ...callopt.Option) (r *product.GetProductResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetProduct(ctx, Req)
+}
+
+func (p *kProductServiceClient) UpdateStock(ctx context.Context, Req *product.UpdateStockRequest, callOptions ...callopt.Option) (r *product.UpdateStockResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.UpdateStock(ctx, Req)
 }

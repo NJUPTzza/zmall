@@ -227,6 +227,71 @@ func (x *GetProductResponse) fastReadField2(buf []byte, _type int8) (offset int,
 	return offset, nil
 }
 
+func (x *UpdateStockRequest) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_UpdateStockRequest[number], err)
+}
+
+func (x *UpdateStockRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.ProductId, offset, err = fastpb.ReadInt64(buf, _type)
+	return offset, err
+}
+
+func (x *UpdateStockRequest) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.Change, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *UpdateStockResponse) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_UpdateStockResponse[number], err)
+}
+
+func (x *UpdateStockResponse) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	var v CommonResponse
+	offset, err = fastpb.ReadMessage(buf, _type, &v)
+	if err != nil {
+		return offset, err
+	}
+	x.CommonResponse = &v
+	return offset, nil
+}
+
 func (x *CommonResponse) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
 	switch number {
 	case 1:
@@ -407,6 +472,47 @@ func (x *GetProductResponse) fastWriteField2(buf []byte) (offset int) {
 	return offset
 }
 
+func (x *UpdateStockRequest) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
+	return offset
+}
+
+func (x *UpdateStockRequest) fastWriteField1(buf []byte) (offset int) {
+	if x.ProductId == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetProductId())
+	return offset
+}
+
+func (x *UpdateStockRequest) fastWriteField2(buf []byte) (offset int) {
+	if x.Change == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 2, x.GetChange())
+	return offset
+}
+
+func (x *UpdateStockResponse) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	return offset
+}
+
+func (x *UpdateStockResponse) fastWriteField1(buf []byte) (offset int) {
+	if x.CommonResponse == nil {
+		return offset
+	}
+	offset += fastpb.WriteMessage(buf[offset:], 1, x.GetCommonResponse())
+	return offset
+}
+
 func (x *CommonResponse) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
@@ -577,6 +683,47 @@ func (x *GetProductResponse) sizeField2() (n int) {
 	return n
 }
 
+func (x *UpdateStockRequest) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	n += x.sizeField2()
+	return n
+}
+
+func (x *UpdateStockRequest) sizeField1() (n int) {
+	if x.ProductId == 0 {
+		return n
+	}
+	n += fastpb.SizeInt64(1, x.GetProductId())
+	return n
+}
+
+func (x *UpdateStockRequest) sizeField2() (n int) {
+	if x.Change == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(2, x.GetChange())
+	return n
+}
+
+func (x *UpdateStockResponse) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	return n
+}
+
+func (x *UpdateStockResponse) sizeField1() (n int) {
+	if x.CommonResponse == nil {
+		return n
+	}
+	n += fastpb.SizeMessage(1, x.GetCommonResponse())
+	return n
+}
+
 func (x *CommonResponse) Size() (n int) {
 	if x == nil {
 		return n
@@ -627,6 +774,15 @@ var fieldIDToName_GetProductRequest = map[int32]string{
 var fieldIDToName_GetProductResponse = map[int32]string{
 	1: "CommonResponse",
 	2: "Product",
+}
+
+var fieldIDToName_UpdateStockRequest = map[int32]string{
+	1: "ProductId",
+	2: "Change",
+}
+
+var fieldIDToName_UpdateStockResponse = map[int32]string{
+	1: "CommonResponse",
 }
 
 var fieldIDToName_CommonResponse = map[int32]string{

@@ -24,3 +24,12 @@ func GetProduct(ctx context.Context, req *product.GetProductRequest, callOptions
 	}
 	return resp, nil
 }
+
+func UpdateStock(ctx context.Context, req *product.UpdateStockRequest, callOptions ...callopt.Option) (resp *product.UpdateStockResponse, err error) {
+	resp, err = defaultClient.UpdateStock(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "UpdateStock call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}

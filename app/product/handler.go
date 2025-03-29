@@ -22,3 +22,10 @@ func (s *ProductServiceImpl) GetProduct(ctx context.Context, req *product.GetPro
 
 	return resp, err
 }
+
+// UpdateStock implements the ProductServiceImpl interface.
+func (s *ProductServiceImpl) UpdateStock(ctx context.Context, req *product.UpdateStockRequest) (resp *product.UpdateStockResponse, err error) {
+	resp, err = service.NewUpdateStockService(ctx).Run(req)
+
+	return resp, err
+}
