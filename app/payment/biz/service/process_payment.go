@@ -7,14 +7,15 @@ import (
 
 type ProcessPaymentService struct {
 	ctx context.Context
-} // NewProcessPaymentService new ProcessPaymentService
+} 
+
+// NewProcessPaymentService new ProcessPaymentService
 func NewProcessPaymentService(ctx context.Context) *ProcessPaymentService {
 	return &ProcessPaymentService{ctx: ctx}
 }
 
 // Run create note info
 func (s *ProcessPaymentService) Run(req *payment.ProcessPaymentRequest) (resp *payment.ProcessPaymentResponse, err error) {
-	// Finish your business logic.
-
+	// TODO: 调用支付服务
 	return
 }
