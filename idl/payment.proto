@@ -77,12 +77,13 @@ message UpdatePaymentStatusResponse {
   Payment payment = 2;  // 更新后的支付信息
 }
 
-// 支付成功 MQ 通知 Event
-message PaymentSuccessMessage {
+// 支付 MQ 通知 Event
+message PaymentMQEvent {
   int64 payment_id = 1;
   int64 order_id = 2;
-  float amount = 3;
-  string payment_status = 4; // 一般都是 "completed"
+  int64 user_id = 3;
+  float amount = 4;
+  PaymentStatus status = 5; 
 }
 
 // 统一返回消息

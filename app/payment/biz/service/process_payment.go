@@ -57,7 +57,17 @@ func (s *ProcessPaymentService) Run(req *payment.ProcessPaymentRequest) (resp *p
 		return nil, errors.New("支付信息存入数据库失败: " + err.Error())
 	}
 
-	// 4. 返回支付信息
+	// 4. 触发 `PAY` 事件，更新状态（`PENDING` -> `PENDING`，但触发了状态机）
+	updateService := NewUpdatePaymentStatusService(s.ctx)
+	_, err = updateService.Run(&payment.UpdatePaymentStatusRequest{
+		PaymentId: int64(newPayment.ID),
+		Event:     payment.PaymentEvent_PAY,
+	})
+	if err != nil {
+		return nil, errors.New("触发支付事件失败: " + err.Error())
+	}
+
+	// 5. 返回支付信息
 	return &payment.ProcessPaymentResponse {
 		CommonResponse: &payment.CommonResponse{
 			Code: 200,

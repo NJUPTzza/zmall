@@ -327,7 +327,7 @@ func (x *UpdatePaymentStatusResponse) fastReadField2(buf []byte, _type int8) (of
 	return offset, nil
 }
 
-func (x *PaymentSuccessMessage) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+func (x *PaymentMQEvent) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
 	switch number {
 	case 1:
 		offset, err = x.fastReadField1(buf, _type)
@@ -349,6 +349,11 @@ func (x *PaymentSuccessMessage) FastRead(buf []byte, _type int8, number int32) (
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 5:
+		offset, err = x.fastReadField5(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -359,27 +364,37 @@ func (x *PaymentSuccessMessage) FastRead(buf []byte, _type int8, number int32) (
 SkipFieldError:
 	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
 ReadFieldError:
-	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_PaymentSuccessMessage[number], err)
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_PaymentMQEvent[number], err)
 }
 
-func (x *PaymentSuccessMessage) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+func (x *PaymentMQEvent) fastReadField1(buf []byte, _type int8) (offset int, err error) {
 	x.PaymentId, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
-func (x *PaymentSuccessMessage) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+func (x *PaymentMQEvent) fastReadField2(buf []byte, _type int8) (offset int, err error) {
 	x.OrderId, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
-func (x *PaymentSuccessMessage) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+func (x *PaymentMQEvent) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+	x.UserId, offset, err = fastpb.ReadInt64(buf, _type)
+	return offset, err
+}
+
+func (x *PaymentMQEvent) fastReadField4(buf []byte, _type int8) (offset int, err error) {
 	x.Amount, offset, err = fastpb.ReadFloat(buf, _type)
 	return offset, err
 }
 
-func (x *PaymentSuccessMessage) fastReadField4(buf []byte, _type int8) (offset int, err error) {
-	x.PaymentStatus, offset, err = fastpb.ReadString(buf, _type)
-	return offset, err
+func (x *PaymentMQEvent) fastReadField5(buf []byte, _type int8) (offset int, err error) {
+	var v int32
+	v, offset, err = fastpb.ReadInt32(buf, _type)
+	if err != nil {
+		return offset, err
+	}
+	x.Status = PaymentStatus(v)
+	return offset, nil
 }
 
 func (x *CommonResponse) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
@@ -619,7 +634,7 @@ func (x *UpdatePaymentStatusResponse) fastWriteField2(buf []byte) (offset int) {
 	return offset
 }
 
-func (x *PaymentSuccessMessage) FastWrite(buf []byte) (offset int) {
+func (x *PaymentMQEvent) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
 	}
@@ -627,10 +642,11 @@ func (x *PaymentSuccessMessage) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField2(buf[offset:])
 	offset += x.fastWriteField3(buf[offset:])
 	offset += x.fastWriteField4(buf[offset:])
+	offset += x.fastWriteField5(buf[offset:])
 	return offset
 }
 
-func (x *PaymentSuccessMessage) fastWriteField1(buf []byte) (offset int) {
+func (x *PaymentMQEvent) fastWriteField1(buf []byte) (offset int) {
 	if x.PaymentId == 0 {
 		return offset
 	}
@@ -638,7 +654,7 @@ func (x *PaymentSuccessMessage) fastWriteField1(buf []byte) (offset int) {
 	return offset
 }
 
-func (x *PaymentSuccessMessage) fastWriteField2(buf []byte) (offset int) {
+func (x *PaymentMQEvent) fastWriteField2(buf []byte) (offset int) {
 	if x.OrderId == 0 {
 		return offset
 	}
@@ -646,19 +662,27 @@ func (x *PaymentSuccessMessage) fastWriteField2(buf []byte) (offset int) {
 	return offset
 }
 
-func (x *PaymentSuccessMessage) fastWriteField3(buf []byte) (offset int) {
-	if x.Amount == 0 {
+func (x *PaymentMQEvent) fastWriteField3(buf []byte) (offset int) {
+	if x.UserId == 0 {
 		return offset
 	}
-	offset += fastpb.WriteFloat(buf[offset:], 3, x.GetAmount())
+	offset += fastpb.WriteInt64(buf[offset:], 3, x.GetUserId())
 	return offset
 }
 
-func (x *PaymentSuccessMessage) fastWriteField4(buf []byte) (offset int) {
-	if x.PaymentStatus == "" {
+func (x *PaymentMQEvent) fastWriteField4(buf []byte) (offset int) {
+	if x.Amount == 0 {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 4, x.GetPaymentStatus())
+	offset += fastpb.WriteFloat(buf[offset:], 4, x.GetAmount())
+	return offset
+}
+
+func (x *PaymentMQEvent) fastWriteField5(buf []byte) (offset int) {
+	if x.Status == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 5, int32(x.GetStatus()))
 	return offset
 }
 
@@ -889,7 +913,7 @@ func (x *UpdatePaymentStatusResponse) sizeField2() (n int) {
 	return n
 }
 
-func (x *PaymentSuccessMessage) Size() (n int) {
+func (x *PaymentMQEvent) Size() (n int) {
 	if x == nil {
 		return n
 	}
@@ -897,10 +921,11 @@ func (x *PaymentSuccessMessage) Size() (n int) {
 	n += x.sizeField2()
 	n += x.sizeField3()
 	n += x.sizeField4()
+	n += x.sizeField5()
 	return n
 }
 
-func (x *PaymentSuccessMessage) sizeField1() (n int) {
+func (x *PaymentMQEvent) sizeField1() (n int) {
 	if x.PaymentId == 0 {
 		return n
 	}
@@ -908,7 +933,7 @@ func (x *PaymentSuccessMessage) sizeField1() (n int) {
 	return n
 }
 
-func (x *PaymentSuccessMessage) sizeField2() (n int) {
+func (x *PaymentMQEvent) sizeField2() (n int) {
 	if x.OrderId == 0 {
 		return n
 	}
@@ -916,19 +941,27 @@ func (x *PaymentSuccessMessage) sizeField2() (n int) {
 	return n
 }
 
-func (x *PaymentSuccessMessage) sizeField3() (n int) {
-	if x.Amount == 0 {
+func (x *PaymentMQEvent) sizeField3() (n int) {
+	if x.UserId == 0 {
 		return n
 	}
-	n += fastpb.SizeFloat(3, x.GetAmount())
+	n += fastpb.SizeInt64(3, x.GetUserId())
 	return n
 }
 
-func (x *PaymentSuccessMessage) sizeField4() (n int) {
-	if x.PaymentStatus == "" {
+func (x *PaymentMQEvent) sizeField4() (n int) {
+	if x.Amount == 0 {
 		return n
 	}
-	n += fastpb.SizeString(4, x.GetPaymentStatus())
+	n += fastpb.SizeFloat(4, x.GetAmount())
+	return n
+}
+
+func (x *PaymentMQEvent) sizeField5() (n int) {
+	if x.Status == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(5, int32(x.GetStatus()))
 	return n
 }
 
@@ -995,11 +1028,12 @@ var fieldIDToName_UpdatePaymentStatusResponse = map[int32]string{
 	2: "Payment",
 }
 
-var fieldIDToName_PaymentSuccessMessage = map[int32]string{
+var fieldIDToName_PaymentMQEvent = map[int32]string{
 	1: "PaymentId",
 	2: "OrderId",
-	3: "Amount",
-	4: "PaymentStatus",
+	3: "UserId",
+	4: "Amount",
+	5: "Status",
 }
 
 var fieldIDToName_CommonResponse = map[int32]string{
