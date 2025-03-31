@@ -24,3 +24,12 @@ func GetOrder(ctx context.Context, req *order.GetOrderRequest, callOptions ...ca
 	}
 	return resp, nil
 }
+
+func UpdateOrderStatus(ctx context.Context, req *order.UpdateOrderStatusRequest, callOptions ...callopt.Option) (resp *order.UpdateOrderStatusResponse, err error) {
+	resp, err = defaultClient.UpdateOrderStatus(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "UpdateOrderStatus call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}

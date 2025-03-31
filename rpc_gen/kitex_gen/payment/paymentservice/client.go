@@ -13,6 +13,7 @@ import (
 type Client interface {
 	ProcessPayment(ctx context.Context, Req *payment.ProcessPaymentRequest, callOptions ...callopt.Option) (r *payment.ProcessPaymentResponse, err error)
 	GetPaymentStatus(ctx context.Context, Req *payment.GetPaymentStatusRequest, callOptions ...callopt.Option) (r *payment.GetPaymentStatusResponse, err error)
+	UpdatePaymentStatus(ctx context.Context, Req *payment.UpdatePaymentStatusRequest, callOptions ...callopt.Option) (r *payment.UpdatePaymentStatusResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -52,4 +53,9 @@ func (p *kPaymentServiceClient) ProcessPayment(ctx context.Context, Req *payment
 func (p *kPaymentServiceClient) GetPaymentStatus(ctx context.Context, Req *payment.GetPaymentStatusRequest, callOptions ...callopt.Option) (r *payment.GetPaymentStatusResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetPaymentStatus(ctx, Req)
+}
+
+func (p *kPaymentServiceClient) UpdatePaymentStatus(ctx context.Context, Req *payment.UpdatePaymentStatusRequest, callOptions ...callopt.Option) (r *payment.UpdatePaymentStatusResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.UpdatePaymentStatus(ctx, Req)
 }

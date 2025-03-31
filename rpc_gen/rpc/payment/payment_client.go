@@ -14,6 +14,7 @@ type RPCClient interface {
 	Service() string
 	ProcessPayment(ctx context.Context, Req *payment.ProcessPaymentRequest, callOptions ...callopt.Option) (r *payment.ProcessPaymentResponse, err error)
 	GetPaymentStatus(ctx context.Context, Req *payment.GetPaymentStatusRequest, callOptions ...callopt.Option) (r *payment.GetPaymentStatusResponse, err error)
+	UpdatePaymentStatus(ctx context.Context, Req *payment.UpdatePaymentStatusRequest, callOptions ...callopt.Option) (r *payment.UpdatePaymentStatusResponse, err error)
 }
 
 func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
@@ -48,4 +49,8 @@ func (c *clientImpl) ProcessPayment(ctx context.Context, Req *payment.ProcessPay
 
 func (c *clientImpl) GetPaymentStatus(ctx context.Context, Req *payment.GetPaymentStatusRequest, callOptions ...callopt.Option) (r *payment.GetPaymentStatusResponse, err error) {
 	return c.kitexClient.GetPaymentStatus(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) UpdatePaymentStatus(ctx context.Context, Req *payment.UpdatePaymentStatusRequest, callOptions ...callopt.Option) (r *payment.UpdatePaymentStatusResponse, err error) {
+	return c.kitexClient.UpdatePaymentStatus(ctx, Req, callOptions...)
 }

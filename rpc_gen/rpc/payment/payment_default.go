@@ -24,3 +24,12 @@ func GetPaymentStatus(ctx context.Context, req *payment.GetPaymentStatusRequest,
 	}
 	return resp, nil
 }
+
+func UpdatePaymentStatus(ctx context.Context, req *payment.UpdatePaymentStatusRequest, callOptions ...callopt.Option) (resp *payment.UpdatePaymentStatusResponse, err error) {
+	resp, err = defaultClient.UpdatePaymentStatus(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "UpdatePaymentStatus call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}

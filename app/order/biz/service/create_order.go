@@ -70,7 +70,7 @@ func (s *CreateOrderService) Run(req *order.CreateOrderRequest) (resp *order.Cre
 		Status: model.OrderStatusPending,
 	}
 	err = mysql.Create(mysql.DB, newOrder)
-	if err!= nil {
+	if err != nil {
 		// 订单创建失败，回滚 Redis 预扣库存
 		redis.IncrProductStock(s.ctx, req.ProductId, req.Quantity)
 		return nil, errors.New("订单创建失败: " + err.Error())

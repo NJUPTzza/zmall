@@ -5,7 +5,7 @@ go 1.23.7
 replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 
 require (
-	github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250328044617-15d5e5159f9a
+	github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250330052327-9f85729f60fc
 	github.com/cloudwego/kitex v0.12.3
 	github.com/joho/godotenv v1.5.1
 	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20241120035129-55da83caab1b

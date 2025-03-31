@@ -29,6 +29,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"UpdatePaymentStatus": kitex.NewMethodInfo(
+		updatePaymentStatusHandler,
+		newUpdatePaymentStatusArgs,
+		newUpdatePaymentStatusResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -401,6 +408,159 @@ func (p *GetPaymentStatusResult) GetResult() interface{} {
 	return p.Success
 }
 
+func updatePaymentStatusHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(payment.UpdatePaymentStatusRequest)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(payment.PaymentService).UpdatePaymentStatus(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *UpdatePaymentStatusArgs:
+		success, err := handler.(payment.PaymentService).UpdatePaymentStatus(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*UpdatePaymentStatusResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newUpdatePaymentStatusArgs() interface{} {
+	return &UpdatePaymentStatusArgs{}
+}
+
+func newUpdatePaymentStatusResult() interface{} {
+	return &UpdatePaymentStatusResult{}
+}
+
+type UpdatePaymentStatusArgs struct {
+	Req *payment.UpdatePaymentStatusRequest
+}
+
+func (p *UpdatePaymentStatusArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(payment.UpdatePaymentStatusRequest)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *UpdatePaymentStatusArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *UpdatePaymentStatusArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *UpdatePaymentStatusArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *UpdatePaymentStatusArgs) Unmarshal(in []byte) error {
+	msg := new(payment.UpdatePaymentStatusRequest)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var UpdatePaymentStatusArgs_Req_DEFAULT *payment.UpdatePaymentStatusRequest
+
+func (p *UpdatePaymentStatusArgs) GetReq() *payment.UpdatePaymentStatusRequest {
+	if !p.IsSetReq() {
+		return UpdatePaymentStatusArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *UpdatePaymentStatusArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *UpdatePaymentStatusArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type UpdatePaymentStatusResult struct {
+	Success *payment.UpdatePaymentStatusResponse
+}
+
+var UpdatePaymentStatusResult_Success_DEFAULT *payment.UpdatePaymentStatusResponse
+
+func (p *UpdatePaymentStatusResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(payment.UpdatePaymentStatusResponse)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *UpdatePaymentStatusResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *UpdatePaymentStatusResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *UpdatePaymentStatusResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *UpdatePaymentStatusResult) Unmarshal(in []byte) error {
+	msg := new(payment.UpdatePaymentStatusResponse)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *UpdatePaymentStatusResult) GetSuccess() *payment.UpdatePaymentStatusResponse {
+	if !p.IsSetSuccess() {
+		return UpdatePaymentStatusResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *UpdatePaymentStatusResult) SetSuccess(x interface{}) {
+	p.Success = x.(*payment.UpdatePaymentStatusResponse)
+}
+
+func (p *UpdatePaymentStatusResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *UpdatePaymentStatusResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -426,6 +586,16 @@ func (p *kClient) GetPaymentStatus(ctx context.Context, Req *payment.GetPaymentS
 	_args.Req = Req
 	var _result GetPaymentStatusResult
 	if err = p.c.Call(ctx, "GetPaymentStatus", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) UpdatePaymentStatus(ctx context.Context, Req *payment.UpdatePaymentStatusRequest) (r *payment.UpdatePaymentStatusResponse, err error) {
+	var _args UpdatePaymentStatusArgs
+	_args.Req = Req
+	var _result UpdatePaymentStatusResult
+	if err = p.c.Call(ctx, "UpdatePaymentStatus", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

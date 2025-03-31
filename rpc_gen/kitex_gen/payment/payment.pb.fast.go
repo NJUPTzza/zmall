@@ -242,6 +242,91 @@ func (x *GetPaymentStatusResponse) fastReadField2(buf []byte, _type int8) (offse
 	return offset, nil
 }
 
+func (x *UpdatePaymentStatusRequest) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_UpdatePaymentStatusRequest[number], err)
+}
+
+func (x *UpdatePaymentStatusRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.PaymentId, offset, err = fastpb.ReadInt64(buf, _type)
+	return offset, err
+}
+
+func (x *UpdatePaymentStatusRequest) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	var v int32
+	v, offset, err = fastpb.ReadInt32(buf, _type)
+	if err != nil {
+		return offset, err
+	}
+	x.Event = PaymentEvent(v)
+	return offset, nil
+}
+
+func (x *UpdatePaymentStatusResponse) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_UpdatePaymentStatusResponse[number], err)
+}
+
+func (x *UpdatePaymentStatusResponse) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	var v CommonResponse
+	offset, err = fastpb.ReadMessage(buf, _type, &v)
+	if err != nil {
+		return offset, err
+	}
+	x.CommonResponse = &v
+	return offset, nil
+}
+
+func (x *UpdatePaymentStatusResponse) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	var v Payment
+	offset, err = fastpb.ReadMessage(buf, _type, &v)
+	if err != nil {
+		return offset, err
+	}
+	x.Payment = &v
+	return offset, nil
+}
+
 func (x *PaymentSuccessMessage) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
 	switch number {
 	case 1:
@@ -484,6 +569,56 @@ func (x *GetPaymentStatusResponse) fastWriteField2(buf []byte) (offset int) {
 	return offset
 }
 
+func (x *UpdatePaymentStatusRequest) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
+	return offset
+}
+
+func (x *UpdatePaymentStatusRequest) fastWriteField1(buf []byte) (offset int) {
+	if x.PaymentId == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetPaymentId())
+	return offset
+}
+
+func (x *UpdatePaymentStatusRequest) fastWriteField2(buf []byte) (offset int) {
+	if x.Event == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 2, int32(x.GetEvent()))
+	return offset
+}
+
+func (x *UpdatePaymentStatusResponse) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
+	return offset
+}
+
+func (x *UpdatePaymentStatusResponse) fastWriteField1(buf []byte) (offset int) {
+	if x.CommonResponse == nil {
+		return offset
+	}
+	offset += fastpb.WriteMessage(buf[offset:], 1, x.GetCommonResponse())
+	return offset
+}
+
+func (x *UpdatePaymentStatusResponse) fastWriteField2(buf []byte) (offset int) {
+	if x.Payment == nil {
+		return offset
+	}
+	offset += fastpb.WriteMessage(buf[offset:], 2, x.GetPayment())
+	return offset
+}
+
 func (x *PaymentSuccessMessage) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
@@ -704,6 +839,56 @@ func (x *GetPaymentStatusResponse) sizeField2() (n int) {
 	return n
 }
 
+func (x *UpdatePaymentStatusRequest) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	n += x.sizeField2()
+	return n
+}
+
+func (x *UpdatePaymentStatusRequest) sizeField1() (n int) {
+	if x.PaymentId == 0 {
+		return n
+	}
+	n += fastpb.SizeInt64(1, x.GetPaymentId())
+	return n
+}
+
+func (x *UpdatePaymentStatusRequest) sizeField2() (n int) {
+	if x.Event == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(2, int32(x.GetEvent()))
+	return n
+}
+
+func (x *UpdatePaymentStatusResponse) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	n += x.sizeField2()
+	return n
+}
+
+func (x *UpdatePaymentStatusResponse) sizeField1() (n int) {
+	if x.CommonResponse == nil {
+		return n
+	}
+	n += fastpb.SizeMessage(1, x.GetCommonResponse())
+	return n
+}
+
+func (x *UpdatePaymentStatusResponse) sizeField2() (n int) {
+	if x.Payment == nil {
+		return n
+	}
+	n += fastpb.SizeMessage(2, x.GetPayment())
+	return n
+}
+
 func (x *PaymentSuccessMessage) Size() (n int) {
 	if x == nil {
 		return n
@@ -796,6 +981,16 @@ var fieldIDToName_GetPaymentStatusRequest = map[int32]string{
 }
 
 var fieldIDToName_GetPaymentStatusResponse = map[int32]string{
+	1: "CommonResponse",
+	2: "Payment",
+}
+
+var fieldIDToName_UpdatePaymentStatusRequest = map[int32]string{
+	1: "PaymentId",
+	2: "Event",
+}
+
+var fieldIDToName_UpdatePaymentStatusResponse = map[int32]string{
 	1: "CommonResponse",
 	2: "Payment",
 }

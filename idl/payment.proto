@@ -10,6 +10,8 @@ service PaymentService {
   rpc ProcessPayment(ProcessPaymentRequest) returns (ProcessPaymentResponse);
   // 查询支付状态
   rpc GetPaymentStatus(GetPaymentStatusRequest) returns (GetPaymentStatusResponse);
+  // 更新支付状态（状态机）
+  rpc UpdatePaymentStatus(UpdatePaymentStatusRequest) returns (UpdatePaymentStatusResponse);
 }
 
 // 支付状态
@@ -19,6 +21,15 @@ enum PaymentStatus {
   PAID = 2;        // 已支付
   FAILED = 3;      // 支付失败
   REFUNDED = 4;    // 已退款
+}
+
+// 支付事件（状态流转）
+enum PaymentEvent {
+  PAY = 0;          // 发起支付
+  PAY_SUCCESS = 1;  // 支付成功
+  PAY_FAIL = 2;     // 支付失败
+  REQUEST_REFUND = 3; // 申请退款
+  REFUND_SUCCESS = 4; // 退款成功
 }
 
 // 支付信息
@@ -52,6 +63,18 @@ message GetPaymentStatusRequest {
 message GetPaymentStatusResponse {
   CommonResponse commonResponse = 1;
   Payment payment = 2;    // 支付信息
+}
+
+// 支付状态更新请求
+message UpdatePaymentStatusRequest {
+  int64 payment_id = 1;  // 支付ID
+  PaymentEvent event = 2; // 触发的支付事件
+}
+
+// 支付状态更新返回
+message UpdatePaymentStatusResponse {
+  CommonResponse commonResponse = 1;
+  Payment payment = 2;  // 更新后的支付信息
 }
 
 // 支付成功 MQ 通知 Event

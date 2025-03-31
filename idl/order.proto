@@ -10,15 +10,31 @@ service OrderService {
   rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
   // 获取订单详情
   rpc GetOrder(GetOrderRequest) returns (GetOrderResponse);
+    // 更新订单状态
+    rpc UpdateOrderStatus(UpdateOrderStatusRequest) returns (UpdateOrderStatusResponse);
 }
 
 // 订单状态枚举
 enum OrderStatus {
   UNKNOWN = 0;        // 未知状态
   PENDING = 1;        // 待支付
-  COMPLETED = 2;      // 已完成
-  CANCELLED = 3;      // 已取消
-  PAYMENT_FAILED = 4; // 支付失败
+  PROCESSING = 2;     // 处理中，如支付中，发货中等
+  SUCCESS = 3;        // 订单完成
+  FAILED = 4;         // 失败或已取消
+  SHIPPED = 5;        // 已发货
+  DELIVERED = 6;      // 已签收
+  REFUNDED = 7;       // 已退款
+}
+
+// 订单事件（状态流转）
+enum OrderEvent {
+  CREATE = 0;       // 订单创建
+  PAY_SUCCESS = 1;  // 支付成功
+  PAY_FAIL = 2;     // 支付失败
+  SHIP = 3;         // 订单发货
+  DELIVER = 4;      // 订单签收
+  CANCEL = 5;       // 订单取消
+  REFUND = 6;       // 订单退款
 }
 
 // 订单信息
@@ -53,6 +69,18 @@ message GetOrderRequest {
 message GetOrderResponse {
   CommonResponse commonResponse = 1;
   Order order = 2;        // 订单信息
+}
+
+// 订单状态更新请求
+message UpdateOrderStatusRequest {
+  int64 order_id = 1;  // 订单ID
+  OrderEvent event = 2; // 触发的事件
+}
+
+// 订单状态更新返回
+message UpdateOrderStatusResponse {
+  CommonResponse commonResponse = 1;
+  Order order = 2;  // 更新后的订单信息
 }
 
 // 统一返回消息
