@@ -15,6 +15,7 @@ type RPCClient interface {
 	Register(ctx context.Context, Req *user.RegisterRequest, callOptions ...callopt.Option) (r *user.RegisterResponse, err error)
 	Login(ctx context.Context, Req *user.LoginRequest, callOptions ...callopt.Option) (r *user.LoginResponse, err error)
 	GetUser(ctx context.Context, Req *user.GetUserRequest, callOptions ...callopt.Option) (r *user.GetUserResponse, err error)
+	CheckUser(ctx context.Context, Req *user.CheckUserRequest, callOptions ...callopt.Option) (r *user.CheckUserResponse, err error)
 }
 
 func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
@@ -53,4 +54,8 @@ func (c *clientImpl) Login(ctx context.Context, Req *user.LoginRequest, callOpti
 
 func (c *clientImpl) GetUser(ctx context.Context, Req *user.GetUserRequest, callOptions ...callopt.Option) (r *user.GetUserResponse, err error) {
 	return c.kitexClient.GetUser(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) CheckUser(ctx context.Context, Req *user.CheckUserRequest, callOptions ...callopt.Option) (r *user.CheckUserResponse, err error) {
+	return c.kitexClient.CheckUser(ctx, Req, callOptions...)
 }

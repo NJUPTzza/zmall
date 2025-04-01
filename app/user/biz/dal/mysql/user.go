@@ -20,3 +20,4 @@ func GetUserById(db *gorm.DB, id int64) (*model.User, error) {
 	err := db.Where("id = ?", id).First(&user).Error
 	return &user, err
 }
+

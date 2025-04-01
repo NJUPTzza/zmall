@@ -29,3 +29,10 @@ func (s *UserServiceImpl) GetUser(ctx context.Context, req *user.GetUserRequest)
 
 	return resp, err
 }
+
+// CheckUser implements the UserServiceImpl interface.
+func (s *UserServiceImpl) CheckUser(ctx context.Context, req *user.CheckUserRequest) (resp *user.CheckUserResponse, err error) {
+	resp, err = service.NewCheckUserService(ctx).Run(req)
+
+	return resp, err
+}

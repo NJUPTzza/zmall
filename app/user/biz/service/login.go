@@ -31,7 +31,16 @@ func (s *LoginService) Run(req *user.LoginRequest) (resp *user.LoginResponse, er
 		return nil, err
 	}
 	resp = &user.LoginResponse{
-		Token: "token",
+		CommonResponse: &user.CommonResponse{
+			Code: 200,
+			Message:  "success",
+		},
+		User: &user.User{
+			Id: int64(row.ID),
+			Username: row.Username,
+			Email: row.Email,
+			Phone: row.Phone,
+		},
 	}
 	return resp, nil
 }

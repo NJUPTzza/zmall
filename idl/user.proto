@@ -12,6 +12,8 @@ service UserService {
   rpc Login(LoginRequest) returns (LoginResponse);
   // 获取用户信息
   rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  // 检查账号密码（网关使用）
+  rpc CheckUser(CheckUserRequest) returns (CheckUserResponse);
 }
 
 // 用户信息
@@ -46,8 +48,8 @@ message LoginRequest {
 
 // 登录返回
 message LoginResponse {
-  string token = 1;       // 登录令牌
-  CommonResponse CommonResponse = 2;
+  CommonResponse CommonResponse = 1;
+  User user = 2;          // 用户信息
 }
 
 // 获取用户信息请求
@@ -60,6 +62,19 @@ message GetUserResponse {
   User user = 1;          // 用户信息
   CommonResponse CommonResponse = 2;
 } 
+
+// 检查账号密码请求
+message CheckUserRequest {
+  string username = 1;    // 用户名
+  string password = 2;    // 密码
+}
+
+// 检查账号密码返回
+message CheckUserResponse {
+  CommonResponse CommonResponse = 1;
+  int64 id = 2;           // 用户ID
+  string username = 3;    // 用户名
+}
 
 // 统一返回消息
 message CommonResponse {

@@ -36,6 +36,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"CheckUser": kitex.NewMethodInfo(
+		checkUserHandler,
+		newCheckUserArgs,
+		newCheckUserResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -561,6 +568,159 @@ func (p *GetUserResult) GetResult() interface{} {
 	return p.Success
 }
 
+func checkUserHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(user.CheckUserRequest)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(user.UserService).CheckUser(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *CheckUserArgs:
+		success, err := handler.(user.UserService).CheckUser(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*CheckUserResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newCheckUserArgs() interface{} {
+	return &CheckUserArgs{}
+}
+
+func newCheckUserResult() interface{} {
+	return &CheckUserResult{}
+}
+
+type CheckUserArgs struct {
+	Req *user.CheckUserRequest
+}
+
+func (p *CheckUserArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(user.CheckUserRequest)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *CheckUserArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *CheckUserArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *CheckUserArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *CheckUserArgs) Unmarshal(in []byte) error {
+	msg := new(user.CheckUserRequest)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var CheckUserArgs_Req_DEFAULT *user.CheckUserRequest
+
+func (p *CheckUserArgs) GetReq() *user.CheckUserRequest {
+	if !p.IsSetReq() {
+		return CheckUserArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *CheckUserArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *CheckUserArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type CheckUserResult struct {
+	Success *user.CheckUserResponse
+}
+
+var CheckUserResult_Success_DEFAULT *user.CheckUserResponse
+
+func (p *CheckUserResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(user.CheckUserResponse)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *CheckUserResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *CheckUserResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *CheckUserResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *CheckUserResult) Unmarshal(in []byte) error {
+	msg := new(user.CheckUserResponse)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *CheckUserResult) GetSuccess() *user.CheckUserResponse {
+	if !p.IsSetSuccess() {
+		return CheckUserResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *CheckUserResult) SetSuccess(x interface{}) {
+	p.Success = x.(*user.CheckUserResponse)
+}
+
+func (p *CheckUserResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *CheckUserResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -596,6 +756,16 @@ func (p *kClient) GetUser(ctx context.Context, Req *user.GetUserRequest) (r *use
 	_args.Req = Req
 	var _result GetUserResult
 	if err = p.c.Call(ctx, "GetUser", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) CheckUser(ctx context.Context, Req *user.CheckUserRequest) (r *user.CheckUserResponse, err error) {
+	var _args CheckUserArgs
+	_args.Req = Req
+	var _result CheckUserResult
+	if err = p.c.Call(ctx, "CheckUser", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

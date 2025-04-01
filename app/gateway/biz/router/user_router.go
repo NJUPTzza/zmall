@@ -6,6 +6,7 @@ import (
 	"log"
 
 	handler "github.com/NJUPTzza/zmall/app/gateway/biz/handler/user"
+	"github.com/NJUPTzza/zmall/app/gateway/biz/mw"
 	"github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/user/userservice"
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/kitex/client"
@@ -22,6 +23,9 @@ func userRegister(r *server.Hertz) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// 初始化 JWT 中间件
+	mw.InitJwt(client)
 
 	r.POST("/api/v1/register", handler.Register(client))
 	r.POST("/api/v1/login", handler.Login(client))

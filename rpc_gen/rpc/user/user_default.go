@@ -33,3 +33,12 @@ func GetUser(ctx context.Context, req *user.GetUserRequest, callOptions ...callo
 	}
 	return resp, nil
 }
+
+func CheckUser(ctx context.Context, req *user.CheckUserRequest, callOptions ...callopt.Option) (resp *user.CheckUserResponse, err error) {
+	resp, err = defaultClient.CheckUser(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "CheckUser call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
