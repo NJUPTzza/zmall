@@ -3,7 +3,7 @@ module github.com/NJUPTzza/zmall/app/gateway
 go 1.23.7
 
 require (
-	github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250331072040-3d0fdd464e89
+	github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250401083852-d40fc686131b
 	github.com/kitex-contrib/registry-etcd v0.2.6
 )
 

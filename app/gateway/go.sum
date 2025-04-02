@@ -1,7 +1,7 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250331072040-3d0fdd464e89 h1:KgNDoc8DlrWXef9iIcYLCDM6RtRVT5mH5LlE/UEH87E=
-github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250331072040-3d0fdd464e89/go.mod h1:Qbsnq/8slguzDXjSbWTAUG3d5yKuw3sMQE1kPpHR8GA=
+github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250401083852-d40fc686131b h1:zgBkgfdmlcCdfVBjgIx6mLPVkqn7KGpYOLcy5g9/xms=
+github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250401083852-d40fc686131b/go.mod h1:Qbsnq/8slguzDXjSbWTAUG3d5yKuw3sMQE1kPpHR8GA=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=
 github.com/bytedance/gopkg v0.1.0/go.mod h1:FtQG3YbQG9L/91pbKSw787yBQPutC+457AvDW77fgUQ=

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/NJUPTzza/zmall/app/common"
 	"github.com/NJUPTzza/zmall/app/payment/biz/dal/mysql"
 	"github.com/NJUPTzza/zmall/app/payment/biz/model"
 	payment "github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/payment"
@@ -42,6 +43,7 @@ func (s *UpdatePaymentStatusService) Run(req *payment.UpdatePaymentStatusRequest
 	if req.Event == payment.PaymentEvent_PAY_SUCCESS {
 		// TODO: 发布支付成功事件
 		// 用 mq 通知 order 修改状态，通知 prodcut 修改库存，通知 notifacation 发送通知
+		ch := common
 	}
 
 	// 5. 返回更新后的支付信息

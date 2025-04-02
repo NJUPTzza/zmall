@@ -30,7 +30,7 @@ func CreateOrder(orderClient orderservice.Client) app.HandlerFunc {
 			return
 		}
 
-		resp, err := orderClient.CreateOrder(ctx, &orderservice.CreateOrderRequest{
+		resp, err := orderClient.CreateOrder(ctx, &order.CreateOrderRequest{
 			UserId: userId,
 			ProductId: req.ProductId,
 			Quantity: req.Quantity,
