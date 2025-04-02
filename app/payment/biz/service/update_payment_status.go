@@ -4,11 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 
-	"github.com/NJUPTzza/zmall/app/common"
+	common "github.com/NJUPTzza/zmall/app/common/mq"
 	"github.com/NJUPTzza/zmall/app/payment/biz/dal/mysql"
 	"github.com/NJUPTzza/zmall/app/payment/biz/model"
 	payment "github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/payment"
+	"github.com/rabbitmq/amqp091-go"
+	"google.golang.org/protobuf/proto"
 )
 
 type UpdatePaymentStatusService struct {
@@ -43,7 +46,51 @@ func (s *UpdatePaymentStatusService) Run(req *payment.UpdatePaymentStatusRequest
 	if req.Event == payment.PaymentEvent_PAY_SUCCESS {
 		// TODO: 发布支付成功事件
 		// 用 mq 通知 order 修改状态，通知 prodcut 修改库存，通知 notifacation 发送通知
-		ch := common
+		event := &payment.PaymentMQEvent {
+			PaymentId: paymentRecord.ID,
+			OrderId: paymentRecord.OrderId,
+			UserId: paymentRecord.UserId,
+			Amount: paymentRecord.Amount,
+			Status: payment.PaymentStatus(paymentRecord.Status),
+		}
+		// 将 PaymentMQEvent 对象序列化为字节数组
+		data, err := proto.Marshal(event)
+		if err != nil {
+			return nil, errors.New(fmt.Sprintf("消息序列化失败: %v", err))
+		}
+		// 获取 RabbitMQ 通道
+		ch := common.RabbitMQChannel
+		if ch == nil {
+			return nil, errors.New("MQ初始化失败")
+		}
+		// 声明队列，确保队列存在
+		queueName := "payment_event_queue"
+		_, err = ch.QueueDeclare(
+			queueName, // 队列名称
+			true,      // 是否持久化
+			false,     // 是否自动删除
+			false,     // 是否排他
+			false,     // 是否阻塞
+			nil,       // 其他参数
+		)
+		if err != nil {
+			return nil, errors.New(fmt.Sprintf("声明队列失败: %v", err))
+		}
+		// 发布消息到队列
+		err = ch.Publish(
+			"",           // 默认交换机
+			queueName,    // 队列名称
+			false,        // 是否强制
+			false,        // 是否等待
+			amqp091.Publishing{
+				ContentType: "application/x-protobuf", // 消息格式
+				Body:        data, // 消息内容
+			},
+		)
+		if err != nil {
+			return nil, errors.New(fmt.Sprintf("发布消息失败: %v", err))
+		}
+		log.Println("支付成功事件已发布到 RabbitMQ")
 	}
 
 	// 5. 返回更新后的支付信息

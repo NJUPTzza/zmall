@@ -36,15 +36,18 @@ enum PaymentEvent {
 message Payment {
   int64 id = 1;           // 支付ID
   int64 order_id = 2;     // 订单ID
-  float amount = 3;       // 支付金额
-  PaymentStatus status = 4;
+  int64 user_id = 3;      // 用户ID
+  float amount = 4;       // 支付金额
+  string pay_channel = 5;
+  PaymentStatus status = 6;
 }
 
 // 发起支付请求
 message ProcessPaymentRequest {
   int64 order_id = 1;     // 订单ID
-  float amount = 2;       // 支付金额
-  string pay_channel = 3; // 支付渠道，如 "wechat"、"alipay"
+  int64 user_id = 2;      // 用户ID
+  float amount = 3;       // 支付金额
+  string pay_channel = 4; // 支付渠道，如 "wechat"、"alipay"
 }
 
 // 发起支付返回

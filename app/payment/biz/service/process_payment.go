@@ -47,6 +47,7 @@ func (s *ProcessPaymentService) Run(req *payment.ProcessPaymentRequest) (resp *p
 	// 3. 将支付信息存入数据库中
 	newPayment := &model.Payment {
 		OrderId: req.OrderId,
+		UserId: req.UserId,
 		Amount: req.Amount,
 		PayChannel: req.PayChannel,
 		Status: model.PaymentStatusPending,
@@ -76,6 +77,7 @@ func (s *ProcessPaymentService) Run(req *payment.ProcessPaymentRequest) (resp *p
 		Payment: &payment.Payment{
 			Id: int64(newPayment.ID),
 			OrderId: newPayment.OrderId,
+			UserId: newPayment.UserId,
 			Amount: newPayment.Amount,
 		},
 		PayUrl: newPayment.PayURL,

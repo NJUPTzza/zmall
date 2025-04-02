@@ -1,6 +1,7 @@
 package dal
 
 import (
+	"github.com/NJUPTzza/zmall/app/order/biz/dal/mq"
 	"github.com/NJUPTzza/zmall/app/order/biz/dal/mysql"
 	"github.com/NJUPTzza/zmall/app/order/biz/dal/redis"
 )
@@ -8,4 +9,5 @@ import (
 func Init() {
 	redis.Init()
 	mysql.Init()
+	mq.Init()
 }
