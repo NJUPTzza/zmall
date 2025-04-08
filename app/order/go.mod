@@ -5,7 +5,7 @@ go 1.23.7
 replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 
 require (
-	github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250331025946-a7b446450b87
+	github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250402081829-16f9a6ce9ac6
 	github.com/cloudwego/kitex v0.12.3
 	github.com/joho/godotenv v1.5.1
 	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20241120035129-55da83caab1b
@@ -81,6 +81,6 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20250324211829-b45e905df463 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250324211829-b45e905df463 // indirect
 	google.golang.org/grpc v1.71.0 // indirect
-	google.golang.org/protobuf v1.36.6 // indirect
+	google.golang.org/protobuf v1.36.6
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

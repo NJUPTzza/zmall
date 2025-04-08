@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/NJUPTzza/zmall/app/notification/biz/model"
-	"github.com/NJUPTzza/zmall/app/notification/conf"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

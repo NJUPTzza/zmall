@@ -12,6 +12,8 @@ service ProductService {
   rpc GetProduct(GetProductRequest) returns (GetProductResponse);
   // 更新库存
   rpc UpdateStock(UpdateStockRequest) returns (UpdateStockResponse);
+  // 搜索商品
+  rpc SearchProducts(SearchProductsRequest) returns (SearchProductsResponse);
 }
 
 // 商品信息
@@ -20,6 +22,9 @@ message Product {
   string name = 2;        // 商品名称
   float price = 3;        // 商品价格
   int32 stock = 4;        // 库存数量
+  string brand = 5;       // 品牌
+  string category = 6;    // 分类
+  string description = 7; // 商品描述（用于全文搜索）
 }
 
 // 请求商品列表
@@ -55,6 +60,24 @@ message UpdateStockRequest {
 // 更新库存响应
 message UpdateStockResponse {
   CommonResponse CommonResponse = 1;
+}
+
+// 搜索商品请求
+message SearchProductsRequest {
+  string keyword = 1;        // 搜索关键词
+  string brand = 2;          // 品牌过滤（可选）
+  string category = 3;       // 分类过滤（可选）
+  float min_price = 4;       // 最小价格（可选）
+  float max_price = 5;       // 最大价格（可选）
+  int32 page = 6;            // 页码
+  int32 page_size = 7;       // 每页数量
+}
+
+// 搜索商品响应
+message SearchProductsResponse {
+  CommonResponse CommonResponse = 1;
+  repeated Product products = 2;
+  int32 total = 3;
 }
 
 // 统一返回消息

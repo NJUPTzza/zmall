@@ -47,7 +47,7 @@ func (s *UpdatePaymentStatusService) Run(req *payment.UpdatePaymentStatusRequest
 		// TODO: 发布支付成功事件
 		// 用 mq 通知 order 修改状态，通知 prodcut 修改库存，通知 notifacation 发送通知
 		event := &payment.PaymentMQEvent {
-			PaymentId: paymentRecord.ID,
+			PaymentId: int64(paymentRecord.ID),
 			OrderId: paymentRecord.OrderId,
 			UserId: paymentRecord.UserId,
 			Amount: paymentRecord.Amount,

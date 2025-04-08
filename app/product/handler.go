@@ -29,3 +29,10 @@ func (s *ProductServiceImpl) UpdateStock(ctx context.Context, req *product.Updat
 
 	return resp, err
 }
+
+// SearchProducts implements the ProductServiceImpl interface.
+func (s *ProductServiceImpl) SearchProducts(ctx context.Context, req *product.SearchProductsRequest) (resp *product.SearchProductsResponse, err error) {
+	resp, err = service.NewSearchProductsService(ctx).Run(req)
+
+	return resp, err
+}

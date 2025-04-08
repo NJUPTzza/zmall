@@ -36,6 +36,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"SearchProducts": kitex.NewMethodInfo(
+		searchProductsHandler,
+		newSearchProductsArgs,
+		newSearchProductsResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -561,6 +568,159 @@ func (p *UpdateStockResult) GetResult() interface{} {
 	return p.Success
 }
 
+func searchProductsHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(product.SearchProductsRequest)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(product.ProductService).SearchProducts(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *SearchProductsArgs:
+		success, err := handler.(product.ProductService).SearchProducts(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*SearchProductsResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newSearchProductsArgs() interface{} {
+	return &SearchProductsArgs{}
+}
+
+func newSearchProductsResult() interface{} {
+	return &SearchProductsResult{}
+}
+
+type SearchProductsArgs struct {
+	Req *product.SearchProductsRequest
+}
+
+func (p *SearchProductsArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(product.SearchProductsRequest)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *SearchProductsArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *SearchProductsArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *SearchProductsArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *SearchProductsArgs) Unmarshal(in []byte) error {
+	msg := new(product.SearchProductsRequest)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var SearchProductsArgs_Req_DEFAULT *product.SearchProductsRequest
+
+func (p *SearchProductsArgs) GetReq() *product.SearchProductsRequest {
+	if !p.IsSetReq() {
+		return SearchProductsArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *SearchProductsArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *SearchProductsArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type SearchProductsResult struct {
+	Success *product.SearchProductsResponse
+}
+
+var SearchProductsResult_Success_DEFAULT *product.SearchProductsResponse
+
+func (p *SearchProductsResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(product.SearchProductsResponse)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *SearchProductsResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *SearchProductsResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *SearchProductsResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *SearchProductsResult) Unmarshal(in []byte) error {
+	msg := new(product.SearchProductsResponse)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *SearchProductsResult) GetSuccess() *product.SearchProductsResponse {
+	if !p.IsSetSuccess() {
+		return SearchProductsResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *SearchProductsResult) SetSuccess(x interface{}) {
+	p.Success = x.(*product.SearchProductsResponse)
+}
+
+func (p *SearchProductsResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *SearchProductsResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -596,6 +756,16 @@ func (p *kClient) UpdateStock(ctx context.Context, Req *product.UpdateStockReque
 	_args.Req = Req
 	var _result UpdateStockResult
 	if err = p.c.Call(ctx, "UpdateStock", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) SearchProducts(ctx context.Context, Req *product.SearchProductsRequest) (r *product.SearchProductsResponse, err error) {
+	var _args SearchProductsArgs
+	_args.Req = Req
+	var _result SearchProductsResult
+	if err = p.c.Call(ctx, "SearchProducts", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

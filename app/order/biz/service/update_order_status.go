@@ -7,7 +7,7 @@ import (
 
 	common "github.com/NJUPTzza/zmall/app/common/mq"
 	order "github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/order"
-	"github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/payment"
+	payment "github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/payment"
 	"github.com/rabbitmq/amqp091-go"
 	"google.golang.org/protobuf/proto"
 )
@@ -56,7 +56,7 @@ func (s *UpdateOrderStatusService) Run(req *order.UpdateOrderStatusRequest) (res
 
 // 处理 MQ 消息
 func (s *UpdateOrderStatusService) processPaymentMessage(msg amqp091.Delivery) {
-	var event payment.paymentMQEvent
+	var event payment.PaymentMQEvent
 	if err := proto.Unmarshal(msg.Body, &event); err != nil {
 		log.Printf("消息解析失败: %v", err)
 		return

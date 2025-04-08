@@ -8,4 +8,6 @@ import (
 func Register(r *server.Hertz) {
 	userRegister(r)
 	productRegister(r)
+	orderRegister(r)
+	paymentRegister(r)
 }

@@ -15,6 +15,7 @@ type RPCClient interface {
 	ListProducts(ctx context.Context, Req *product.ListProductsRequest, callOptions ...callopt.Option) (r *product.ListProductsResponse, err error)
 	GetProduct(ctx context.Context, Req *product.GetProductRequest, callOptions ...callopt.Option) (r *product.GetProductResponse, err error)
 	UpdateStock(ctx context.Context, Req *product.UpdateStockRequest, callOptions ...callopt.Option) (r *product.UpdateStockResponse, err error)
+	SearchProducts(ctx context.Context, Req *product.SearchProductsRequest, callOptions ...callopt.Option) (r *product.SearchProductsResponse, err error)
 }
 
 func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
@@ -53,4 +54,8 @@ func (c *clientImpl) GetProduct(ctx context.Context, Req *product.GetProductRequ
 
 func (c *clientImpl) UpdateStock(ctx context.Context, Req *product.UpdateStockRequest, callOptions ...callopt.Option) (r *product.UpdateStockResponse, err error) {
 	return c.kitexClient.UpdateStock(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) SearchProducts(ctx context.Context, Req *product.SearchProductsRequest, callOptions ...callopt.Option) (r *product.SearchProductsResponse, err error) {
+	return c.kitexClient.SearchProducts(ctx, Req, callOptions...)
 }
