@@ -5,7 +5,7 @@ go 1.23.7
 replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 
 require (
-	github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250329053216-29e25b64c6d8
+	github.com/NJUPTzza/zmall/rpc_gen v0.0.0-20250408065601-afc3631fe438
 	github.com/cloudwego/kitex v0.12.3
 	github.com/joho/godotenv v1.5.1
 	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20241120035129-55da83caab1b
@@ -18,6 +18,12 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.25.12
+)
+
+require (
+	github.com/josharian/intern v1.0.0 // indirect
+	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 )
 
 require (
@@ -56,6 +62,8 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/olivere/elastic v6.2.37+incompatible
+	github.com/olivere/elastic/v7 v7.0.32
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect

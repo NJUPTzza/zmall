@@ -4,6 +4,7 @@ import (
 	"context"
 	"strconv"
 
+	"github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/product"
 	"github.com/NJUPTzza/zmall/rpc_gen/kitex_gen/product/productservice"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -30,7 +31,25 @@ func SearchProducts(productClient productservice.Client) app.HandlerFunc{
 			return
 		}
 
-		 // 构造 gRPC 请求
-		 req := productClient
+		// 构造 gRPC 请求
+		req := &product.SearchProductsRequest {
+			Keyword: body.Keyword,
+			Brand: body.Brand,
+			Category: body.Category,
+			MinPrice: body.MinPrice,
+			MaxPrice: body.MaxPrice,
+			Page: int32(page),
+			PageSize: int32(pageSize),
+		}
+
+		// 调用 gRPC 服务
+		resp, err := productClient.SearchProducts(ctx, req)
+		if err != nil {
+			c.JSON(consts.StatusInternalServerError, map[string]string{"error": err.Error()})
+			return
+		}
+
+		// 返回响应
+		c.JSON(consts.StatusOK, resp)
 	}
 }

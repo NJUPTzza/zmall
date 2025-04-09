@@ -42,3 +42,9 @@ func GetAllProductStock(db *gorm.DB) (map[int64]int32, error) {
 	}
 	return stockMap, nil
 }
+
+func GetAllProducts(db *gorm.DB) ([]model.Product, error) {
+	var products []model.Product
+	err := db.Find(&products).Error
+	return products, err
+}
