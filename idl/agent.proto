@@ -4,40 +4,65 @@ package agent;
 
 option go_package = "/agent";
 
-// 客服服务
 service AgentService {
-  // 发送消息给客服
-  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
-  // 获取聊天记录
-  rpc GetChatHistory(GetChatHistoryRequest) returns (GetChatHistoryResponse);
+  // 发送单轮消息，可选带上下文
+  rpc SendMessage(ChatRequest) returns (ChatResponse) {}
+
+  // 流式消息回复（适合token级流式输出）
+  rpc StreamMessage(ChatRequest) returns (stream ChatResponse) {}
+
+  // 获取对话历史
+  rpc GetHistory(GetHistoryRequest) returns (GetHistoryResponse) {}
+
+  // 删除某个会话
+  rpc DeleteHistory(DeleteHistoryRequest) returns (DeleteHistoryResponse) {}
 }
 
-// 消息
+// 请求发送消息
+message ChatRequest {
+  string user_id = 1;                 // 用户ID
+  string message = 2;                 // 当前发送的消息内容
+  string conversation_id = 3;         // 会话ID
+  repeated Message context = 4;       // 可选：上下文历史（可传入最近几轮对话）
+}
+
+// 模型回复
+message ChatResponse {
+  string response = 1;                // 回复内容
+}
+
+// 查询历史请求
+message GetHistoryRequest {
+  string conversation_id = 1;         // 会话ID，可选
+  string user_id = 2;                 // 用户ID
+}
+
+// 查询历史响应
+message GetHistoryResponse {
+  repeated Message history = 1;       // 会话中的历史消息
+  repeated string conversation_ids = 2; // 用户所有会话ID
+}
+
+// 删除历史请求
+message DeleteHistoryRequest {
+  string conversation_id = 1;
+  string user_id = 2;
+}
+
+// 删除响应（可为空）
+message DeleteHistoryResponse {}
+
+// 单条消息结构（可用于 user/assistant/tool 等）
 message Message {
-  int64 id = 1;           // 消息ID
-  int64 user_id = 2;      // 用户ID
-  string content = 3;     // 消息内容
-  string sender = 4;      // 发送者（"user" 或 "agent"）
-  int64 timestamp = 5;    // 发送时间戳
-}
+  enum Role {
+    SYSTEM = 0;      // 系统角色提示，例如：“你是一个客服助手”
+    USER = 1;        // 用户输入
+    ASSISTANT = 2;   // 模型回复
+    TOOL = 3;        // 工具调用或返回内容
+  }
 
-// 发送消息请求
-message SendMessageRequest {
-  int64 user_id = 1;      // 用户ID
-  string content = 2;     // 消息内容
-}
-
-// 发送消息返回
-message SendMessageResponse {
-  Message message = 1;    // 发送的消息
-}
-
-// 获取聊天记录请求
-message GetChatHistoryRequest {
-  int64 user_id = 1;      // 用户ID
-}
-
-// 获取聊天记录返回
-message GetChatHistoryResponse {
-  repeated Message messages = 1;  // 聊天记录
+  Role role = 1;             // 消息角色
+  string content = 2;        // 消息内容
+  string name = 3;           // 工具名或插件名，仅当 role 为 TOOL 时有效
+  int64 timestamp = 4;       // 可选，消息发送时间（Unix 毫秒）
 }
